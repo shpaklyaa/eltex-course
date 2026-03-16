@@ -4,22 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Главная</title>
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 
 <body>
     <header>
-        <a href="index.html">Главная</a>
-        <a href="blog.html">Блог</a>
+        <div class="header">
+            <h3 class="name-folio">Name folio</h3>
+            <nav class="navbar">
+                <a href="index.html">Главная</a>
+                <a href="blog.html">Блог</a>
+            </nav>
+        </div>
     </header>
 
     <main>
         <section>
-            <h1>Обо мне<h1>
-                <h4>Добро пожаловать! Я студент, учусь на 3 курсе факультета Информатики и вычислительной техники В СибГУТИ очно. 
-                    Учусь веб-разработке и мечтаю устроиться в ELTEX. В этом блоге я делюсь своей жизнью и знанями</h4>
-                <img src="images/me.jpg" alt="Me" width="400" height="300">
+                <div class="section">
+                    <div class="text-block">
+                        <h1>Hello! I’m Nelsom, a photographer</h1>
+                        <p>Добро пожаловать! Я студент, учусь на 3 курсе факультета Информатики и вычислительной техники В СибГУТИ очно. 
+                            Учусь веб-разработке и мечтаю устроиться в ELTEX. В этом блоге я делюсь своей жизнью и знанями</р>
+                        <a href="https://instagram.com/">More about me</a>
+                    </div>
+                    <div class="image-container">
+                        <img src="images/image.png" alt="Me" width="400" height="300">
+                    </div>
+                </div>
+        </section>
+
+        <section class="posts">
+            <article class="post">
+                <div class="text-block-post">
+                    <p class="desc">Product photography</p>
+                    <h3>Paris secrets</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium iste magni pariatur mollitia?</p>
+                </div>
+                <div class="image-container-post">
+                    <img src="images/imagenotloaded.png" alt="Me" width="400" height="300">
+                </div>
+            </article>
+            <article class="post">
+                <div class="text-block-post">
+                    <p class="desc">Product photography</p>
+                    <h3>Paris secrets</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium iste magni pariatur mollitia?</p>
+                </div>
+                <div class="image-container-post">
+                    <img src="images/imagenotloaded.png" alt="Me" width="400" height="300">
+                </div>
+            </article>
+            <button class="post-button">Browse all posts</button>
+        </section>
+
+
+
+        <section>
                 <h1>Моя карьера</h1>
                     <h2>Текущая должность</h2>
                     <p>Работаю набивщиком канта на мебельном производстве в свободное от учебы время.</p>
@@ -76,9 +117,9 @@
 
     <footer>
         <h1>Контакты</h1>
-            <p>Email: pospeloff2018@yandex.ru</p>
-            <p>Телефон: +7 (913) 462-50-18</p>
-            <h2>Социальнык сети:</h2>
+            <a href="mailto:pospeloff2018@yandex.ru">pospeloff2018@yandex.ru</a>
+            <a href="tel:+7 (913) 462-50-18">+7 (913) 462-50-18</a>
+            <h2>Социальные сети:</h2>
             <p>
                 <a href="https://instagram.com/">Instagram</a> |
                 <a href="https://twitter.com/">Twitter</a> |
