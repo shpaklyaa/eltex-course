@@ -51,7 +51,7 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     max-width: 1200px;
-    max-height: 400px;
+    height: 400px;
     align-content: center;
     margin: auto;
     margin-top: 40px;
@@ -59,12 +59,17 @@ body {
 }
 
 .text-block-post {
-    padding: 0 0 0 20px;
+    height: 400px;
 }
 
 .image-container-post {
     display: flex;
     justify-content: center;
+    height: 400px;
+    background-image: url('images/imagenotloaded.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .post-button {
@@ -88,24 +93,139 @@ body {
 
 .skills-title {
     margin-bottom: 2rem;
+    margin-left: 2rem;
 }
 
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-
-.skill-item {
-    position: relative;
-    padding-bottom: 0.5rem;
+    gap: 2rem;
+    max-width: 1200px;
+    justify-content: center;
+    margin: auto;
 }
 
 .skill-item {
     font-size: 1.1rem;
     font-weight: 500;
     position: relative;
-    /* display: inline-block; */
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.work-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 1200px;
+    height: 400px;
+    align-content: center;
+    margin: auto;
+}
+
+.work-card {
+    display: grid;
+    grid-template-columns: 1fr 8fr;
+    padding-top: 20px;
+}
+
+.work-card-image-container {
+    margin: auto;
+}
+
+.hobby-article-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.hobby-grid-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.hobby-vertical {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: auto;
+    gap: 40px;
+}
+
+.hobby-image-1 {
+  position: relative;
+  width: 268px;
+  height: 552px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: 
+    linear-gradient(rgba(20, 20, 25, 0.7), rgba(20, 20, 25, 0.7)),
+    url('images/me.jpg') center / cover no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.hobby-image-1 h4,
+.hobby-image-1 p {
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  color: white;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 2;
+}
+
+.hobby-image-1 h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hobby-image-1 p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.hobby-image-1:hover {
+  transform: translateY(-4px);
+}
+
+.hobby-image-1:hover h4,
+.hobby-image-1:hover p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hobby-image-2 {
+  position: relative;
+  width: 268px;
+  height: 552px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: 
+    linear-gradient(rgba(20, 20, 25, 0.7), rgba(20, 20, 25, 0.7)),
+    url('images/me.jpg') center / cover no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.hobby-horizontal {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    margin: auto;
+    gap: 40px;
+}
+
+.hobby-image-3, .hobby-image-4 {
+  position: relative;
+  width: 568px;
+  height: 264px;
+  border-radius: 8px;
+  overflow: hidden;
+  /* object-fit: none; */
 }
 
 h1 {
