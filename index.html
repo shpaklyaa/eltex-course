@@ -4,89 +4,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About me</title>
     <link rel="stylesheet" href="stylesheet.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
 </head>
 
 <body>
     <header>
-        <a href="index.html">Главная</a>
-        <a href="blog.html">Блог</a>
+        <div class="header">
+            <h3 class="name-folio">Name folio</h3>
+            <nav class="navbar">
+                <a href="index.html">About me</a>
+                <a href="blog.html">Blog</a>
+                <a href="#footer">Contacts</a>
+            </nav>
+        </div>
     </header>
 
     <main>
         <section>
-            <h1>Обо мне<h1>
-                <h4>Добро пожаловать! Я студент, учусь на 3 курсе факультета Информатики и вычислительной техники В СибГУТИ очно. 
-                    Учусь веб-разработке и мечтаю устроиться в ELTEX. В этом блоге я делюсь своей жизнью и знанями</h4>
-                <img src="images/me.jpg" alt="Me" width="400" height="300">
-                <h1>Моя карьера</h1>
-                    <h2>Текущая должность</h2>
-                    <p>Работаю набивщиком канта на мебельном производстве в свободное от учебы время.</p>
-                    <h2>Опыт работы</h2>
-                        <h3>Пиццамейкер, Папа Джонс (2021)</h3>
-                            <p>Готовка пиццы</p>
-                        <h3>Мерчендайзер, Быстроном (2022)</h3>
-                            <p>Сотрудник торгового зала</p>
-                        <h3>Курьер, Самокат (2023)</h3>
-                            <p>Велодоставка</p>
-                        <h3>Сборщик доставки, Метро (2025)</h3>
-                            <p>Сборка крупных заказов клиентам</p>
-                    <h2>Образование</h2>
-                        <p>Сибирский Государственный Университет Телекоммуникаций и Информатики, 2023 - н.в.</p>
-                    <h2>Курсы и сертификации</h2>
-                        <ul>
-                            <li>Ввдение в Frontend-разработку(вводные занятия) - Yandex (2025)</li>
-                            <li>Основы веб-разработки с Angular - ELTEX (2026)</li>
-                        </ul>
-                    <h2>Навыки</h2>
-                        <ul>
-                            <li>Программирование: JavaScript, React, HTML5, CSS3, Node.js</li>
-                            <li>Инструменты: Git, Figma, VS Code</li>
-                            <li>Методологии: -</li>
-                        </ul>
-                    <h2>Достижения</h2>
-                        <ul>
-                            <li>Написал несколько приложений на react</li>
-                        </ul>
+                <div class="section">
+                    <div class="text-block">
+                        <h1>Hello! I’m Nelsom, a photographer</h1>
+                        <div class="desc-container">
+                            <p>Добро пожаловать! Я студент, учусь на 3 курсе факультета Информатики и вычислительной техники В СибГУТИ очно. 
+                            Учусь веб-разработке и мечтаю устроиться в ELTEX. В этом блоге я делюсь своей жизнью и знанями</р>
+                            <div><a href="blog.html">More about me ></a></div>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <img src="images/image.png" alt="Me" width="400" height="300">
+                    </div>
+                    <img class="myblogs-image" src="images/myblogs.png" width="213px" height="216px">
+                </div>
         </section>
-        
-        <section>
-            <h1>Последние статьи</h1>
-                <ul>
-                    <li>
-                        <h3>Как создать адаптивный дизайн за 30 минут</h3>
-                        <time datetime="2024-12-15">Опубликовано: 15 декабря 2024</time>
-                        <p>В этой статье я расскажу о ключевых принципах...</p>
-                    </li>
-                    <li>
-                        <h3>Как создать адаптивный дизайн за 30 минут</h3>
-                        <time datetime="2024-12-15">Опубликовано: 15 декабря 2024</time>
-                        <p>В этой статье я расскажу о ключевых принципах...</p>
-                    </li>
-                    <li>
-                        <h3>Как создать адаптивный дизайн за 30 минут</h3>
-                        <time datetime="2024-12-15">Опубликовано: 15 декабря 2024</time>
-                        <p>В этой статье я расскажу о ключевых принципах...</p>
-                    </li>
-                </ul>                   
-            <a href="blog.html">Посмотреть все статьи</a>
+
+        <section class="posts">
+            <article class="post">
+                <div class="text-block-post">
+                    <p class="post-desc">Product photography</p>
+                    <h3>Paris secrets</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium iste magni pariatur mollitia?</p>
+                </div>
+                <div class="image-container-post">
+                    <!-- <img src="images/imagenotloaded.png" alt="Me" width="400" height="300"> -->
+                </div>
+            </article>
+            <article class="post">
+                <div class="text-block-post">
+                    <p class="post-desc">Product photography</p>
+                    <h3>Paris secrets</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium iste magni pariatur mollitia?</p>
+                </div>
+                <div class="image-container-post">
+                    <!-- <img src="images/imagenotloaded.png" alt="Me" width="400" height="300"> -->
+                </div>
+            </article>
+            <button class="post-btn">Browse all posts</button>
+        </section>
+
+        <section class="skill-section">
+            <div class="skills-title"><h1>My skills</h1></div>
+            <div class="skills-grid">
+                <div class="skill-item">Frontend-dev</div>
+                <div class="skill-item">Graphic Design</div>
+                <div class="skill-item">Creativity</div>
+                <div class="skill-item">Brand Identity</div>
+                <div class="skill-item">Copy Writing</div>
+                <div class="skill-item">Team Working</div>
+            </div>
+
+        </section>
+
+        <section class="work-section">
+            <div class="work-desc">
+                <h1 class="work-title">My work</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sint, quasi totam suscipit, voluptate beatae harum voluptas dolorum iusto.</p>
+            </div>
+            <div class="work-grid">
+                <article class="work-card">
+                    <div class="work-card-image-container">
+                        <img src="images/image1.png" alt="Me" width="66" height="59">
+                    </div>
+                    <div class="work-card-text">
+                        <p>consectetur - (2016-2017)</p>
+                        <h4>Graphic design</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fuga labore sapiente doloremque.</p>
+                    </div>
+                </article>
+                <article class="work-card">
+                    <div class="work-card-image-container">
+                        <img src="images/image2.png" alt="Me" width="69" height="67">
+                    </div>
+                    <div class="work-card-text">
+                        <p>consectetur - (2016-2017)</p>
+                        <h4>Graphic design</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fuga labore sapiente doloremque.</p>
+                    </div>
+                </article>
+                <article class="work-card">
+                    <div class="work-card-image-container">
+                        <img src="images/image3.png" alt="Me" width="75" height="75">
+                    </div>
+                    <div class="work-card-text">
+                        <p>consectetur - (2016-2017)</p>
+                        <h4>Graphic design</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fuga labore sapiente doloremque.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="hobby">
+            <div class="hobby-article-grid">
+                <h1 class="hobby-title">Hobby projects</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto earum omnis inventore fugiat architecto laboriosam.</p>
+            </div>
+            <div class="hobby-grid-box">
+                <div class="hobby-vertical">
+                    <div class="hobby-image-1">
+                        <h4>Hobby project name</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>    
+                    </div>
+                    <div class="hobby-image-2"></div>
+                </div>
+                <div class="hobby-horizontal">
+                    <img class="hobby-image-3" src="images/imagenotloaded.png" alt="Me" width="568" height="264">
+                    <img class="hobby-image-4" src="images/imagenotloaded.png" alt="Me" width="568" height="264">
+                </div>
+            </div>
         </section>
     </main>
+    
+    <footer class="footer" id="footer">
+        <div class="footer-grid">
+            <div class="footer-contacts-grid">
+                <h1 class="footer-title">Say hello and let's work together</h1>
+                <div class="footer-email-number">
+                    <p>Email:
+                        <a href="mailto:pospeloff2018@yandex.ru">pospeloff2018@yandex.ru</a>
+                    </p>
+                    <p>Телефон:
+                        <a href="tel:+7 (913) 462-50-18">+7 (913) 462-50-18</a>
+                    </p>
+                </div>
+                <div class="footer-social-networks-grid">
+                    <article class="socnet-link">
+                        <a href="https://vk.com/">
+                            <svg width="26" height="17" viewBox="0 0 26 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.2756 15.762V11.264C18.1346 11.7247 19.0385 14.1024 20.859 15.762H25.5C24.3397 13.0245 22.6084 10.5999 20.4359 8.66954C22.1026 6.24442 23.8718 3.96156 24.7372 0.5H20.5192C18.8654 3.14867 17.9936 6.25119 15.2756 8.29697V0.5H9.15385L10.6154 2.41029V9.21824C8.24359 8.92696 6.64103 4.3409 4.90385 0.5H0.5C2.10256 5.68895 5.47436 17.0762 15.2756 15.762Z" stroke="#FAFBFD" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </article>
+                    <article class="socnet-link">
+                        <a href="https://telegramm.com/">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9654 2.09463C18.2244 0.744938 16.9841 -0.376683 15.7817 0.119877L1.04234 6.20659C-0.300459 6.76111 -0.360291 8.76807 0.946746 9.41279L4.15656 10.9963L5.68351 16.7084C5.76283 17.0051 5.98311 17.2349 6.26258 17.3123C6.54206 17.3896 6.83899 17.3032 7.04314 17.085L9.39524 14.5709L12.6901 17.2122C13.6465 17.9789 15.0241 17.4204 15.2643 16.1687L17.9654 2.09463ZM1.62966 7.83133L16.369 1.74462L13.6679 15.8188L9.8077 12.7243C9.48332 12.4642 9.02939 12.4987 8.74266 12.8052L7.73522 13.882L8.03793 12.1026L13.969 5.76332C14.2577 5.45481 14.2882 4.96561 14.0404 4.61887C13.7926 4.27214 13.3431 4.17488 12.9887 4.39135L4.79761 9.39407L1.62966 7.83133ZM5.79633 10.7902L6.29042 12.6386L6.48011 11.5234C6.50977 11.3491 6.58844 11.1886 6.70563 11.0634L8.51443 9.13019L5.79633 10.7902Z" fill="#FCFEFC"/>
+                            </svg>
+                        </a>
+                    </article>
+                    <article class="socnet-link">
+                        <a href="https://github.com/">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0.500001C7.74456 0.498765 5.56237 1.3538 3.84416 2.91199C2.12596 4.47019 0.983956 6.62978 0.622647 9.00406C0.261337 11.3784 0.704318 13.8123 1.87227 15.87C3.04022 17.9277 4.85686 19.4749 6.9969 20.2344C7.47386 20.3286 7.64609 20.0177 7.64609 19.7634C7.64609 19.5091 7.64609 18.8874 7.64609 18.0443C4.9963 18.6566 4.44868 16.6879 4.44868 16.6879C4.27341 16.0649 3.89207 15.5311 3.37551 15.1854C2.51433 14.559 3.44175 14.5684 3.44175 14.5684C3.74257 14.6133 4.02982 14.7308 4.28161 14.912C4.5334 15.0932 4.74309 15.3333 4.89472 15.614C5.74266 17.1636 7.10289 16.7161 7.65934 16.4571C7.70328 15.9426 7.9178 15.4616 8.26438 15.1006C6.15338 14.8463 3.93638 13.9797 3.93638 10.0987C3.92239 9.09193 4.27365 8.11829 4.91681 7.38114C4.6246 6.50815 4.6578 5.54885 5.00955 4.70121C5.00955 4.70121 5.80449 4.42804 7.6196 5.73739C9.17521 5.28523 10.8159 5.28523 12.3716 5.73739C14.1867 4.42804 14.9816 4.70121 14.9816 4.70121C15.3307 5.5495 15.3638 6.50771 15.0744 7.38114C15.7163 8.11876 16.066 9.0925 16.0504 10.0987C16.0504 13.9891 13.8422 14.8416 11.7179 15.0959C11.9459 15.3422 12.1214 15.6379 12.2327 15.963C12.3439 16.2881 12.3883 16.6349 12.3627 16.9799C12.3627 18.3316 12.3627 19.4243 12.3627 19.7587C12.3627 20.0931 12.535 20.3427 13.0163 20.2297C15.1542 19.4672 16.9679 17.9184 18.1331 15.8604C19.2984 13.8024 19.739 11.3695 19.3762 8.99671C19.0135 6.62397 17.871 4.46627 16.1532 2.90958C14.4353 1.35288 12.2542 0.498763 10 0.500001Z" stroke="#FDFEFF" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </article>
+                </div>
+                <a class="footer-to-top" href="#top">Наверх</a>
+                <p class="copyright">2026 Brand, Inc</p>
+            </div>
+            <div class="footer-form-box">
+                <form class="footer-form">
+                    <label for="title">Email</label>
+                    <input type="text" id="title" name="title" placeholder="Your email address">
 
-    <footer>
-        <h1>Контакты</h1>
-            <p>Email: pospeloff2018@yandex.ru</p>
-            <p>Телефон: +7 (913) 462-50-18</p>
-            <h2>Социальнык сети:</h2>
-            <p>
-                <a href="https://instagram.com/">Instagram</a> |
-                <a href="https://twitter.com/">Twitter</a> |
-                <a href="https://linkedin.com/">LinkedIn</a> |
-                <a href="https://github.com/">GitHub</a>
-            </p>
-            <a href="#top">Наверх</a>
+                    <label for="content">Input your message</label>
+                    <textarea id="content" name="content" rows="6" placeholder="Describe your project"></textarea>
+
+                    <button class="footer-form-btn" type="button">Добавить</button>
+                </form>
+            </div>
+        </div>
     </footer>
 </body>
-
 </html>
