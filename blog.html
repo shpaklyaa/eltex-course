@@ -45,7 +45,7 @@
                     <strong class="stats-number" id="posts-count">0</strong>
                 </div>
                 <div class="stats-card">
-                    <span class="stats-label">Всего статей:</span>
+                    <span class="stats-label">Всего комментариев:</span>
                     <strong class="stats-number" id="comments-count">0</strong>
                 </div>
             </div>
@@ -65,6 +65,10 @@
                 <div class="blogs-grid"></div>
             </div>
             <h4 class="posts-not-found">Нет статей</h4>
+            <div class="loader-box">
+                    <div class="spinner"></div>
+                    <div class="loader">Загрузка...</div>
+            </div>
             <button class="post-btn" id="blogs-btn">Next
                 <svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18.7071 8.07112C19.0976 7.6806 19.0976 7.04743 18.7071 6.65691L12.3431 0.292947C11.9526 -0.0975775 11.3195 -0.0975775 10.9289 0.292947C10.5384 0.683471 10.5384 1.31664 10.9289 1.70716L16.5858 7.36402L10.9289 13.0209C10.5384 13.4114 10.5384 14.0446 10.9289 14.4351C11.3195 14.8256 11.9526 14.8256 12.3431 14.4351L18.7071 8.07112ZM0 7.36401L-8.74228e-08 8.36401L18 8.36402L18 7.36402L18 6.36402L8.74228e-08 6.36401L0 7.36401Z" fill="#75BB7C"/>
@@ -85,6 +89,10 @@
 
                         <button class="blog-form-btn" type="submit">Добавить</button>
                         <button class="btn"  id="close-btn" type="button">Отмена</button>
+                        <div class="loading-message">
+                            <div class="spinner"></div>
+                            <span>Добавление статьи...</span>
+                        </div>
                     </form>
                 </div>  
             </dialog>

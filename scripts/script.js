@@ -64,31 +64,52 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('articles', JSON.stringify(articles));
   }
 
-  // Рендеринг статей
-  articles.forEach(article => {
-    const articleElement = document.importNode(articleTemplate.content, true);
+  const loaderBox = document.querySelector('.loader-box');
 
-    const titleEl = articleElement.querySelector('.article-title');
-    const contentEl = articleElement.querySelector('.article-content');
-    const dateEl = articleElement.querySelector('.article-date');
+  //Показать лоадер
+  function showLoader() {
+    loaderBox.style.visibility = 'visible';
+    loaderBox.style.opacity = '1';
+  }
 
-    if (!titleEl || !contentEl) {
-      console.error('Не найдены .article-title или .article-content в шаблоне');
-      return;
-    }
+  //Скрыть лоадер
+  function hideLoader() {
+    loaderBox.style.visibility = 'hidden';
+    loaderBox.style.opacity = '0';
+  }
 
-    titleEl.textContent = article.title;
-    contentEl.textContent = article.content;
-    dateEl.textContent = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+  showLoader();
+
+  //Рендеринг статей
+  setTimeout(() => {
+    articles = loadArticlesFromLocalStorage();
+
+    articles.forEach(article => {
+      const articleElement = document.importNode(articleTemplate.content, true);
+
+      const titleEl = articleElement.querySelector('.article-title');
+      const contentEl = articleElement.querySelector('.article-content');
+      const dateEl = articleElement.querySelector('.article-date');
+
+      if (!titleEl || !contentEl) {
+        console.error('Не найдены .article-title или .article-content в шаблоне');
+        return;
+      }
+
+      titleEl.textContent = article.title;
+      contentEl.textContent = article.content;
+      dateEl.textContent = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      blogsGrid.appendChild(articleElement);
     });
 
-    blogsGrid.appendChild(articleElement);
-  });
-
-  updateEmptyState();
+    updateEmptyState();
+    hideLoader();
+  }, 1000);
 
   // Добавление статьи
   addForm.addEventListener('submit', function (event) {
@@ -107,32 +128,44 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const newArticleElement = document.importNode(articleTemplate.content, true);
+    const inputs = addForm.querySelectorAll('input, textarea, button');
+    inputs.forEach(input => input.disabled = true);
 
-    const titleEl = newArticleElement.querySelector('.article-title');
-    const contentEl = newArticleElement.querySelector('.article-content');
-    const dateEl = newArticleElement.querySelector('.article-date');
+    const loadingMessage = addForm.querySelector('.loading-message');
+    loadingMessage.style.display = 'flex';
 
-    if (!titleEl || !contentEl) {
-      console.error('Не найдены .article-title или .article-content в шаблоне');
-      return;
-    }
+    setTimeout(() => {
+      const newArticleElement = document.importNode(articleTemplate.content, true);
 
-    titleEl.textContent = title;
-    contentEl.textContent = content;
-    dateEl.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'});
+      const titleEl = newArticleElement.querySelector('.article-title');
+      const contentEl = newArticleElement.querySelector('.article-content');
+      const dateEl = newArticleElement.querySelector('.article-date');
 
-    blogsGrid.appendChild(newArticleElement);
-    const newArticleData = { title, content };
-    articles.push(newArticleData);
-    saveArticlesToLocalStorage(articles);
+      if (!titleEl || !contentEl) {
+        console.error('Не найдены .article-title или .article-content в шаблоне');
+        return;
+      }
 
-    if (modal) modal.close();
-      addForm.reset();
-      
-    updateEmptyState();
+      titleEl.textContent = title;
+      contentEl.textContent = content;
+      dateEl.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'});
 
-    console.log('Статья добавлена');
+      blogsGrid.appendChild(newArticleElement);
+      const newArticleData = { title, content };
+      articles.push(newArticleData);
+      saveArticlesToLocalStorage(articles);
+
+      if (modal) modal.close();
+        addForm.reset();
+        
+      updateEmptyState();
+
+      addForm.removeAttribute('aria-busy');
+      inputs.forEach(input => input.disabled = false);
+      loadingMessage.style.display = 'none';
+
+      console.log('Статья добавлена');
+    }, 1000);
   });
 
   // Удаление статьи
@@ -161,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextPostBtn = document.querySelector('#blogs-btn');
 
     if (postsNotFound) {
-      postsNotFound.hidden = !isEmpty;
+      postsNotFound.classList.toggle('show', isEmpty);
     }
 
     if (nextPostBtn) {
