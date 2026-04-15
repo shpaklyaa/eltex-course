@@ -1,0 +1,224 @@
+@import '../../../../variables.scss';
+
+.blogs {
+    text-align: center;
+}
+
+.blogs-title-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1200px;
+    margin: auto;
+    text-align: left;
+}
+
+.blogs-title-block {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.blogs-title-image {
+    display: flex;
+    justify-content: end;
+}
+
+.loader-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.loader {
+    font-size: 1.5rem;
+    color: $hover-color;
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: $hover-color;
+    display: none;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid $hover-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    row-gap: 5rem;
+    padding-top: 3rem;
+    max-width: 1200px;
+    margin: auto;
+    min-height: 400px;
+}
+
+.posts-not-found {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    color: $secondary-color;
+}
+
+.posts-not-found.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#blogs-btn {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    width: 170px;
+    display: inline-block;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(20px);
+}
+
+#blogs-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.delete-btn {
+    background: none;
+    position: absolute;
+    transition: 0.3s ease;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+
+.blog-article:hover .delete-btn {
+    opacity: 1;
+    transition: 0.3s ease;
+}
+
+.delete-btn:hover {
+    transform: scale(1.1);
+}
+
+.btn {
+    height: 40px;
+    margin: auto;
+    margin-top: 30px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    color: $hover-color;
+    border-color: $hover-color;
+}
+
+.form {
+    text-align: left;
+}
+
+.form input:disabled, .form textarea:disabled, .form button:disabled {
+    background-color: #f9f9f9;
+    border-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.modal {
+    margin: auto;
+    padding: 2% 5% 2% 5%;
+    box-sizing: border-box;
+    width: 75%;
+    height: 50%;
+    border-radius: 8px;
+    border-color: #ffffff;
+}
+
+.modal:not([open]) {
+    display: none !important;
+}
+
+.modal::backdrop {
+    background-color: #00000073;
+}
+
+.btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: $hover-color;
+}
+
+.blog-form {
+    border-radius: 8px;
+    border-color: $hover-color;
+}
+
+.blog-form h1 {
+    color: $text-color;
+}
+
+.blog-form label {
+    color: #1E2128;
+    text-align: left;
+    font-weight: 300;
+}
+
+.blog-form input, .blog-form textarea {
+    border-radius: 8px;
+    border-color: #000000 !important;
+}
+
+.blog-form input {
+    height: 50px;
+}
+
+.blog-form-btn {
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    margin-top: 15px;
+    border-radius: 3px;
+    background: var(--hover-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    color: #ffffff;
+}
+
+.blog-form-btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: var(--hover-color);
+    color: var(--hover-color);
+}
+
+#close-btn {
+    margin: 0;
+    width: 100px;
+}
