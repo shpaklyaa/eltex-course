@@ -71,3 +71,21 @@
     font-weight: 800;
     line-height: 1;
 }
+
+.modal {
+    margin: auto;
+    padding: 2% 5% 2% 5%;
+    box-sizing: border-box;
+    width: 75%;
+    height: 50%;
+    border-radius: 8px;
+    border-color: #ffffff;
+}
+
+.modal:not([open]) {
+    display: none !important;
+}
+
+.modal::backdrop {
+    background-color: #00000073;
+}

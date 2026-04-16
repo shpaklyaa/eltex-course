@@ -1,0 +1,115 @@
+@import '../../../../variables.scss';
+// .modal {
+//     margin: auto;
+//     padding: 2% 5% 2% 5%;
+//     box-sizing: border-box;
+//     width: 75%;
+//     height: 50%;
+//     border-radius: 8px;
+//     border-color: #ffffff;
+//     display: none;
+// }
+
+.modal {
+    position: fixed;
+    margin: auto;
+    width: 1200px; // ← занимает весь экран
+    height: 50%;
+    background: rgba(255, 255, 255); // ← затемнённый фон
+    display: none; // ← изначально скрыт
+    justify-content: center; // ← центрирование по горизонтали
+    align-items: center; // ← центрирование по вертикали
+    z-index: 1000; // ← поверх всех других элементов
+    border-radius: 8px;
+    border-color: #ffffff;
+}
+
+.modal.show {
+  display: flex;
+}
+
+// .modal:not([open]) {
+//     display: none !important;
+// }
+
+.modal::backdrop {
+    background-color: #00000073;
+}
+
+.form {
+    text-align: left;
+}
+
+.form input:disabled, .form textarea:disabled, .form button:disabled {
+    background-color: #f9f9f9;
+    border-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+.blog-form {
+    border-radius: 8px;
+    border-color: $hover-color;
+    h1 {
+        color: $text-color;
+    }
+    label {
+        color: #1E2128;
+        text-align: left;
+        font-weight: 300;
+    }
+    input, textarea {
+        border-radius: 8px;
+        border-color: #000000 !important;
+    }
+    input {
+        height: 50px;
+    }
+}
+
+.blog-form-btn {
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    margin-top: 15px;
+    border-radius: 3px;
+    background: var(--hover-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    color: #ffffff;
+}
+
+.blog-form-btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: var(--hover-color);
+    color: var(--hover-color);
+}
+
+#close-btn {
+    margin: 0;
+    width: 100px;
+}
+
+.btn {
+    height: 40px;
+    margin: auto;
+    margin-top: 30px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    color: $hover-color;
+    border-color: $hover-color;
+}
+
+
+.btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: $hover-color;
+}

@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { Post } from '../../components/post/post';
+import { FormModal } from '../../components/form-modal/form-modal';
+import { StatsModal } from '../../components/stats-modal/stats-modal';
 
 @Component({
   selector: 'app-blog',
   imports: [
     Post,
-    AdminPanel
+    AdminPanel,
+    FormModal,
+    StatsModal
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
@@ -21,4 +25,5 @@ export class Blog {
     { id: 5, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
     { id: 6, title: 'Styling Components', content: 'Style your components effectively.' }
   ]
+  public articlesCount = this.articles.length;
 }

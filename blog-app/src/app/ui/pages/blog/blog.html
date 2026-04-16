@@ -1,17 +1,5 @@
 <app-admin-panel></app-admin-panel>
-<dialog class="modal" id="stats-modal">
-    <h1>Статистика страницы</h1>
-    <div class="stats-grid">
-        <div class="stats-card">
-            <span class="stats-label">Всего статей:</span>
-            <strong class="stats-number" id="posts-count">0</strong>
-        </div>
-        <div class="stats-card">
-            <span class="stats-label">Всего комментариев:</span>
-            <strong class="stats-number" id="comments-count">0</strong>
-        </div>
-    </div>
-</dialog>
+<app-stats-modal></app-stats-modal>
 <section class="blogs">
     <div class="blogs-title-grid">
         <div class="blogs-title-block">
@@ -45,24 +33,4 @@
     </button>
 </section>
 
-<section class="form">
-    <dialog class="modal" id="modal">
-        <div class="blog-form-box">
-            <form class="blog-form">
-                <h1>Добавить статью</h1>
-                <label for="title">Заголовок</label>
-                <input type="text" id="title" name="title" required placeholder="Заголовок статьи">
-
-                <label for="content">Текст статьи</label>
-                <textarea id="content" name="content" rows="5" required placeholder="Текст статьи"></textarea>
-
-                <button class="blog-form-btn" type="submit">Добавить</button>
-                <button class="btn"  id="close-btn" type="button">Отмена</button>
-                <div class="loading-message">
-                    <div class="spinner"></div>
-                    <span>Добавление статьи...</span>
-                </div>
-            </form>
-        </div>  
-    </dialog>
-</section>
+<app-form-modal>
