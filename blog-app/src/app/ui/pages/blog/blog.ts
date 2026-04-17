@@ -25,17 +25,6 @@ export class Blog {
     return this.articles.length;
   }
 
-  get findMinIndex(): number {
-    let minIndex = 0;
-    for (let i = 1; i < this.articles.length; i++) {
-      if (this.articles[i] < this.articles[minIndex]) {
-        minIndex = i;
-      }
-    }
-    return minIndex;
-  } 
-
-
   ngOnInit() {
     console.log(this.articlesCount);
   }
