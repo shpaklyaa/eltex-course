@@ -1,5 +1,4 @@
-<app-admin-panel></app-admin-panel>
-<app-stats-modal></app-stats-modal>
+<app-admin-panel [articlesCount]="articlesCount"></app-admin-panel>
 <section class="blogs">
     <div class="blogs-title-grid">
         <div class="blogs-title-block">
@@ -13,11 +12,14 @@
 
     <div class="blogs">
         <div class="blogs-grid">
-            @for (article of articles; track article.id) {
+            @for (article of articles; track $index) {
                 <app-post 
                 [title]="article.title" 
                 [content]="article.content"
-                [isFirst]="article.id === 0"></app-post>
+                [isFirst]="article.id === 0"
+                [id]="article.id"
+                (delete)="deleteArticle($event)">
+                </app-post>
             }
         </div>
     </div>
@@ -32,5 +34,3 @@
         </svg>
     </button>
 </section>
-
-<app-form-modal>

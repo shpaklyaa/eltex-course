@@ -1,13 +1,15 @@
-<dialog class="modal" id="stats-modal">
+<div class="modal-backdrop" (click)="closeOnBackdropClick($event)" [class.show]="visible"></div>
+
+<div class="modal" id="stats-modal" [class.show]="visible">
     <h1>Статистика страницы</h1>
     <div class="stats-grid">
         <div class="stats-card">
             <span class="stats-label">Всего статей:</span>
-            <strong class="stats-number" id="posts-count">{{articlesCount}}</strong>
+            <strong class="stats-number" id="posts-count">{{articlesCount || 0}}</strong>
         </div>
         <div class="stats-card">
             <span class="stats-label">Всего комментариев:</span>
             <strong class="stats-number" id="comments-count">0</strong>
         </div>
     </div>
-</dialog>
+</div>

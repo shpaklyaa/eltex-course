@@ -1,16 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { Post } from '../../components/post/post';
-import { FormModal } from '../../components/form-modal/form-modal';
-import { StatsModal } from '../../components/stats-modal/stats-modal';
 
 @Component({
   selector: 'app-blog',
   imports: [
     Post,
-    AdminPanel,
-    FormModal,
-    StatsModal
+    AdminPanel
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
@@ -25,5 +21,27 @@ export class Blog {
     { id: 5, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
     { id: 6, title: 'Styling Components', content: 'Style your components effectively.' }
   ]
-  public articlesCount = this.articles.length;
+  get articlesCount(): number {
+    return this.articles.length;
+  }
+
+  get findMinIndex(): number {
+    let minIndex = 0;
+    for (let i = 1; i < this.articles.length; i++) {
+      if (this.articles[i] < this.articles[minIndex]) {
+        minIndex = i;
+      }
+    }
+    return minIndex;
+  } 
+
+
+  ngOnInit() {
+    console.log(this.articlesCount);
+  }
+
+  deleteArticle(id: number) {
+    console.log('[Blog] Deleting article with id:', id);
+    this.articles = this.articles.filter(article => article.id !== id);
+  }
 }

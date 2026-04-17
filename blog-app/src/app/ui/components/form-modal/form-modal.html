@@ -1,4 +1,4 @@
-<section class="form">
+<div class="modal-backdrop" (click)="closeOnBackdropClick($event)" [class.show]="visible"></div>
     <div class="modal" id="modal" [class.show]="visible">
         <div class="blog-form-box">
             <form class="blog-form">
@@ -9,13 +9,12 @@
                 <label for="content">Текст статьи</label>
                 <textarea id="content" name="content" rows="5" required placeholder="Текст статьи"></textarea>
 
-                <button class="blog-form-btn" type="submit">Добавить</button>
+                <button class="blog-form-btn" type="button">Добавить</button>
                 <button (click)="close()"class="btn"  id="close-btn" type="button">Отмена</button>
-                <div class="loading-message">
+                <!-- <div class="loading-message">
                     <div class="spinner"></div>
                     <span>Добавление статьи...</span>
-                </div>
+                </div> -->
             </form>
         </div>  
     </div>
-</section>

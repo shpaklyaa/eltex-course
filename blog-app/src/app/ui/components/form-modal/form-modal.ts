@@ -22,7 +22,7 @@ export class FormModal {
   }
 
   closeOnBackdropClick(event: MouseEvent) {
-    if ((event.target as HTMLElement).classList.contains('modal')) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       console.log('[FormModal] open() called');
       this.close();
       console.log('[FormModal] visible =', this.visible);
