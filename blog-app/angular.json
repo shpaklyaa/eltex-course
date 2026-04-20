@@ -22,7 +22,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "baseHref": "/eltex-course/",
+            
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -30,7 +30,9 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/assets"
+              "src/assets",
+              "src/styles.scss",
+              "src/variables.scss"
             ],
             "styles": ["src/styles.scss"],
             "server": "src/main.server.ts",
