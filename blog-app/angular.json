@@ -85,7 +85,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "name": "shpatel",
+            "name": "Shpatell",
             "email": "pospeloff2018@yandex.ru"
           }
         }
