@@ -75,16 +75,19 @@
 }
 
 .posts-not-found {
-    opacity: 0;
-    visibility: hidden;
+    // opacity: 0;
+    // visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     color: $secondary-color;
+    text-align: center;
+    grid-column: span 3;
+    padding-top: 30%;
 }
 
-.posts-not-found.show {
-    opacity: 1;
-    visibility: visible;
-}
+// .posts-not-found.show {
+//     // opacity: 1;
+//     // visibility: visible;
+// }
 
 #blogs-btn {
     margin-top: 100px;
@@ -151,74 +154,7 @@
     opacity: 0.9;
 }
 
-// .modal {
-//     margin: auto;
-//     padding: 2% 5% 2% 5%;
-//     box-sizing: border-box;
-//     width: 75%;
-//     height: 50%;
-//     border-radius: 8px;
-//     border-color: #ffffff;
-// }
-
-// .modal:not([open]) {
-//     display: none !important;
-// }
-
-// .modal::backdrop {
-//     background-color: #00000073;
-// }
-
 .btn:hover {
     background-color: rgba(16, 185, 129, 0.1);
     color: $hover-color;
 }
-
-// .blog-form {
-//     border-radius: 8px;
-//     border-color: $hover-color;
-// }
-
-// .blog-form h1 {
-//     color: $text-color;
-// }
-
-// .blog-form label {
-//     color: #1E2128;
-//     text-align: left;
-//     font-weight: 300;
-// }
-
-// .blog-form input, .blog-form textarea {
-//     border-radius: 8px;
-//     border-color: #000000 !important;
-// }
-
-// .blog-form input {
-//     height: 50px;
-// }
-
-// .blog-form-btn {
-//     width: 100px;
-//     height: 40px;
-//     margin: auto;
-//     margin-top: 15px;
-//     border-radius: 3px;
-//     background: var(--hover-color);
-//     cursor: pointer;
-//     transition: all 0.3s ease;
-//     text-decoration: none;
-//     display: inline-block;
-//     color: #ffffff;
-// }
-
-// .blog-form-btn:hover {
-//     background-color: rgba(16, 185, 129, 0.1);
-//     border-color: var(--hover-color);
-//     color: var(--hover-color);
-// }
-
-// #close-btn {
-//     margin: 0;
-//     width: 100px;
-// }

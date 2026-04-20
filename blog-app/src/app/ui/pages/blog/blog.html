@@ -21,9 +21,12 @@
                 (delete)="deleteArticle($event)">
                 </app-post>
             }
+
+            @empty {
+                <h4 class="posts-not-found">Нет статей</h4>
+            }
         </div>
     </div>
-    <h4 class="posts-not-found">Нет статей</h4>
     <div class="loader-box">
             <div class="spinner"></div>
             <div class="loader">Загрузка...</div>

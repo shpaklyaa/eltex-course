@@ -1,38 +1,5 @@
 @import '../../../../variables.scss';
 
-// .blog-article:first-of-type {
-//     flex-direction: row;
-//     grid-column: span 3;
-//     display: grid;
-//     grid-template-columns: 2.5fr 1fr;
-//     max-width: 1200px;
-//     height: 454px;
-// }
-
-// .blog-article:first-of-type .image-container-blog-article {
-//     display: flex;
-//     justify-content: center;
-//     height: 454px;
-//     background-image: url('../../../../assets/images/imagenotloaded.png');
-//     background-size: cover;
-//     background-position: center;
-//     background-repeat: no-repeat;
-// }
-
-// .blog-article:first-of-type .text-container-blog-article {
-//     background-color: #FAFAFA;
-//     text-align: left;
-//     padding-left: 30px;
-//     padding-top: 40px;
-// }
-
-// :host {
-//     padding: 16px;
-//     border-radius: 8px;
-//     background: #fff;
-//     border: 1px solid #eee;
-// }
-
 :host {
   display: contents;
 }
