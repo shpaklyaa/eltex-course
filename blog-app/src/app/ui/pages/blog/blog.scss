@@ -67,7 +67,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    row-gap: 5rem;
+    row-gap: 7rem;
     padding-top: 3rem;
     max-width: 1200px;
     margin: auto;
@@ -75,19 +75,12 @@
 }
 
 .posts-not-found {
-    // opacity: 0;
-    // visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     color: $secondary-color;
     text-align: center;
     grid-column: span 3;
     padding-top: 30%;
 }
-
-// .posts-not-found.show {
-//     // opacity: 1;
-//     // visibility: visible;
-// }
 
 #blogs-btn {
     margin-top: 100px;

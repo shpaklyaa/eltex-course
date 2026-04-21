@@ -1,10 +1,10 @@
-<header>
+<header id="header">
         <div class="header">
             <h3 class="name-folio">Name folio</h3>
             <nav class="navbar">
                 <a routerLink="/">About me</a>
                 <a routerLink="/blog">Blog</a>
-                <a href="#footer">Contacts</a>
+                <a (click)="scrollTo('footer')">Contacts</a>
             </nav>
         </div>
 </header>
