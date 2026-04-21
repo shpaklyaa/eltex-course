@@ -100,7 +100,7 @@
     display: flex;
     justify-content: center;
     height: 400px;
-    background-image: url('/assets/images/imagenotloaded.png');
+    background-image: var(--img-imagenotloaded);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -228,7 +228,7 @@
   height: 552px;
   border-radius: 8px;
   overflow: hidden;
-  background: url('/assets/images/me.jpg') center / cover no-repeat;
+  background: var(--img-me) center / cover no-repeat;
   transition: transform 0.3s ease;
 }
 
@@ -264,7 +264,7 @@
     transition: color 0.3s ease;
     background: 
         linear-gradient(rgba(19, 139, 19, 0.541), rgba(43, 44, 43, 0.7)),
-        url('/assets/images/me.jpg') center / cover no-repeat;
+        var(--img-me) center / cover no-repeat;
 }
 
 .hobby-image-1:hover h4,
@@ -281,7 +281,7 @@
   overflow: hidden;
     background: 
         linear-gradient(rgba(20, 20, 25, 0.7), rgba(91, 91, 153, 0.7)),
-        url('/assets/images/me.jpg') center / cover no-repeat;
+        var(--img-me) center / cover no-repeat;
   transition: transform 0.3s ease;
 }
 
