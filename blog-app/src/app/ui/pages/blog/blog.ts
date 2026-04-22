@@ -21,6 +21,9 @@ export class Blog {
     { id: 5, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
     { id: 6, title: 'Styling Components', content: 'Style your components effectively.' }
   ]
+
+  editingArticleId: number | null = null;
+
   get articlesCount(): number {
     return this.articles.length;
   }
@@ -32,5 +35,11 @@ export class Blog {
   deleteArticle(id: number) {
     console.log('[Blog] Deleting article with id:', id);
     this.articles = this.articles.filter(article => article.id !== id);
+  }
+
+  editArticle(id: number) {
+    console.log(`[Blog] Editing article with id: ${id}`);
+    this.editingArticleId = id;
+    // this.articles = this.articles.splice(id, id, editedArticle);
   }
 }
