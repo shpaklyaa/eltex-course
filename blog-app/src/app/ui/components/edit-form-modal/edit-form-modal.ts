@@ -1,16 +1,19 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Article } from '../../../types/article';
 
 @Component({
   selector: 'app-edit-form-modal',
-  imports: [],
+  imports: [
+    ReactiveFormsModule
+  ],
   templateUrl: './edit-form-modal.html',
   styleUrl: './edit-form-modal.scss',
 })
 export class EditFormModal {
    visible: boolean = false;
-   @Input() article!: { id: number, title: string, content: string };
-   @Output() save = new EventEmitter<{ id: number; title: string; content: string }>();
+   @Input() article?: Article;
+   @Output() save = new EventEmitter<Article>();
 
   open() {
     console.log('[FormModal] open() called');
@@ -41,15 +44,25 @@ export class EditFormModal {
     });
   }
 
-  ngOnInit() {
-    this.form.patchValue({
-      title: this.article.title,
-      content: this.article.content
-    });
+  ngOnInit(): void {
+    if (this.article) {
+      this.form.patchValue({
+        title: this.article.title,
+        content: this.article.content
+      });
+    } else {
+      console.warn('No article provided to EditFormModal');
+    }
+
   }
 
-  onSave() {
-    const updatedArticle = {
+  onSave(): void {
+    if (!this.article || !this.form.valid) {
+    console.warn('Cannot save: article not provided or form invalid');
+    return;
+    }
+
+    const updatedArticle: Article = {
       id: this.article.id,
       title: this.form.value.title!,
       content: this.form.value.content!

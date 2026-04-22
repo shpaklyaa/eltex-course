@@ -1,8 +1,9 @@
 <div class="modal-backdrop" (click)="closeOnBackdropClick($event)" [class.show]="visible"></div>
     <div class="modal" id="modal" [class.show]="visible">
         <div class="blog-form-box">
-            <form class="blog-form">
+            <form [formGroup]="form" (ngSubmit)="onSave()" class="blog-form">
                 <h1>Редактировать статью</h1>
+
                 <label for="title">Заголовок</label>
                 <input formControlName = "title" type="text" id="title" name="title" required placeholder="Заголовок статьи">
 

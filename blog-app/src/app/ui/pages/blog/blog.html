@@ -18,7 +18,8 @@
                 [content]="article.content"
                 [isFirst]="article.id === 0"
                 [id]="article.id"
-                (delete)="deleteArticle($event)">
+                (delete)="deleteArticle($event)"
+                (edit)="editArticle($event)">
                 </app-post>
             }
 
@@ -37,3 +38,9 @@
         </svg>
     </button>
 </section>
+
+<app-edit-form-modal
+*ngIf="editingArticle"
+[article]="editingArticle"
+(save)="onSaveArticle($event)">
+</app-edit-form-modal>

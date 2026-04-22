@@ -1,18 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
+import { EditFormModal } from '../../components/edit-form-modal/edit-form-modal';
 import { Post } from '../../components/post/post';
+import { Article } from '../../.././types/article';
 
 @Component({
   selector: 'app-blog',
   imports: [
     Post,
-    AdminPanel
+    AdminPanel,
+    EditFormModal
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
 })
 export class Blog {
-  articles = [
+  articles: Article[] = [
     { id: 0, title: 'Angular Basics', content: 'Learn the fundamentals of Angular.' },
     { id: 1, title: 'Angular Basics', content: 'Learn the fundamentals of Angular.' },
     { id: 2, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
@@ -22,7 +25,7 @@ export class Blog {
     { id: 6, title: 'Styling Components', content: 'Style your components effectively.' }
   ]
 
-  editingArticleId: number | null = null;
+  editingArticle: Article | undefined = undefined;
 
   get articlesCount(): number {
     return this.articles.length;
@@ -39,7 +42,15 @@ export class Blog {
 
   editArticle(id: number) {
     console.log(`[Blog] Editing article with id: ${id}`);
-    this.editingArticleId = id;
+    this.editingArticle = this.articles.find(article => article.id === id);
     // this.articles = this.articles.splice(id, id, editedArticle);
+  }
+
+  onSaveArticle(updatedArticle: { id: number; title: string; content: string }) {
+    const index = this.articles.findIndex(article => article.id === updatedArticle.id);
+    if (index !== -1) {
+      this.articles[index] = updatedArticle;
+    }
+    this.editingArticle = undefined;
   }
 }
