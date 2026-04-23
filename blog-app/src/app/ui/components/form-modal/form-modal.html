@@ -1,16 +1,17 @@
-<div class="modal-backdrop" (click)="closeOnBackdropClick($event)" [class.show]="visible"></div>
-    <div class="modal" id="modal" [class.show]="visible">
+<div class="modal-backdrop" (click)="closeOnBackdropClick($event)"></div>
+    <div class="modal" id="modal">
         <div class="blog-form-box">
-            <form class="blog-form">
+            <form [formGroup]="form" class="blog-form">
                 <h1>Добавить статью</h1>
+                
                 <label for="title">Заголовок</label>
-                <input type="text" id="title" name="title" required placeholder="Заголовок статьи">
+                <input formControlName = "title" type="text" id="title" name="title" required placeholder="Заголовок статьи">
 
                 <label for="content">Текст статьи</label>
-                <textarea id="content" name="content" rows="5" required placeholder="Текст статьи"></textarea>
+                <textarea formControlName = "content" id="content" name="content" rows="5" required placeholder="Текст статьи"></textarea>
 
-                <button class="blog-form-btn" type="button">Добавить</button>
-                <button (click)="close()"class="btn"  id="close-btn" type="button">Отмена</button>
+                <button (click)="onSave()" class="blog-form-btn" type="button">Добавить</button>
+                <button (click)="onClose()"class="btn"  id="close-btn" type="button">Отмена</button>
                 <!-- <div class="loading-message">
                     <div class="spinner"></div>
                     <span>Добавление статьи...</span>

@@ -11,29 +11,9 @@ import { Article } from '../../../types/article';
   styleUrl: './edit-form-modal.scss',
 })
 export class EditFormModal {
-   visible: boolean = false;
-   @Input() article?: Article;
-   @Output() save = new EventEmitter<Article>();
-
-  open() {
-    console.log('[FormModal] open() called');
-    this.visible = true;
-    console.log('[FormModal] visible =', this.visible);
-  }
-
-  close() {
-    console.log('[FormModal] open() called');
-    this.visible = false;
-    console.log('[FormModal] visible =', this.visible);
-  }
-
-  closeOnBackdropClick(event: MouseEvent) {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
-      console.log('[FormModal] open() called');
-      this.close();
-      console.log('[FormModal] visible =', this.visible);
-    }
-  }
+  @Input() article?: Article;
+  @Output() save = new EventEmitter<Article>();
+  @Output() close = new EventEmitter<void>();
 
   form: FormGroup;
 
@@ -53,7 +33,23 @@ export class EditFormModal {
     } else {
       console.warn('No article provided to EditFormModal');
     }
+  }
 
+  // open(article: Article) {
+  //   console.log('[FormModal] open() called');
+  //   this.article = article;
+
+  // }
+
+  onClose() {
+    this.close.emit();
+  }
+
+  closeOnBackdropClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+      console.log('[FormModal] open() called');
+      this.onClose();
+    }
   }
 
   onSave(): void {
@@ -61,12 +57,12 @@ export class EditFormModal {
     console.warn('Cannot save: article not provided or form invalid');
     return;
     }
-
     const updatedArticle: Article = {
       id: this.article.id,
       title: this.form.value.title!,
       content: this.form.value.content!
     };
     this.save.emit(updatedArticle);
+    this.onClose();
   }
 }

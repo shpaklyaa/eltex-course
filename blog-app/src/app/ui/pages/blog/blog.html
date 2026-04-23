@@ -1,4 +1,8 @@
-<app-admin-panel [articlesCount]="articlesCount"></app-admin-panel>
+<app-admin-panel
+(openModal)="openModalForm()"
+(openStats)="openModalStats()"
+></app-admin-panel>
+
 <section class="blogs">
     <div class="blogs-title-grid">
         <div class="blogs-title-block">
@@ -40,7 +44,21 @@
 </section>
 
 <app-edit-form-modal
-*ngIf="editingArticle"
+*ngIf="isEditModalOpen"
 [article]="editingArticle"
-(save)="onSaveArticle($event)">
+(save)="onSaveArticle($event)"
+(close)="closeModal()">
 </app-edit-form-modal>
+
+<app-form-modal
+*ngIf="isAddModalOpen"
+[articlesCount]="articlesCount"
+(save)="onSaveArticle($event)"
+(close)="closeModal()">
+</app-form-modal>
+
+<app-stats-modal
+*ngIf="isStatsModalOpen"
+[articlesCount]="articlesCount"
+(close)="closeModal()">
+</app-stats-modal>

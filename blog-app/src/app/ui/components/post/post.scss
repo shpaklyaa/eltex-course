@@ -18,7 +18,6 @@
         height: 454px;
         display: flex;
         justify-content: center;
-        // background-image: var(--img-imagenotloaded);
         background-size: cover;
         background-position: center;
     }
@@ -71,10 +70,18 @@
 .image-container-blog-article {
     display: flex;
     justify-content: center;
-    // background-image: var(--img-imagenotloaded);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.edit-btn {
+    background: none;
+    position: absolute;
+    transition: 0.3s ease;
+    opacity: 0;
+    right: 40px;
+    top: -5px;
 }
 
 .delete-btn {
@@ -83,14 +90,18 @@
     transition: 0.3s ease;
     opacity: 0;
     right: 0;
-    top: 0;
+    top: -7px;
 }
 
-.blog-article:hover .delete-btn {
+.blog-article:hover .delete-btn, .blog-article:hover .edit-btn {
     opacity: 1;
     transition: 0.3s ease;
 }
 
 .delete-btn:hover {
+    transform: scale(1.1);
+}
+
+.edit-btn:hover {
     transform: scale(1.1);
 }
