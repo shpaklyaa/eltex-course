@@ -26,6 +26,26 @@
     z-index: 999;
 }
 
+.blog-form {
+    border-radius: 8px;
+    border-color: $hover-color;
+    h1 {
+        color: $text-color;
+    }
+    label {
+        color: #1E2128;
+        text-align: left;
+        font-weight: 300;
+    }
+    input, textarea {
+        border-radius: 8px;
+        border-color: #000000 !important;
+    }
+    input {
+        height: 50px;
+    }
+}
+
 .alert {
     color: red;
     font-size: 12px;
@@ -56,26 +76,6 @@ textarea.ng-invalid.ng-touched:focus {
     text-decoration: none;
     display: inline-block;
     color: $primary-color;
-}
-
-.blog-form {
-    border-radius: 8px;
-    border-color: $hover-color;
-    h1 {
-        color: $text-color;
-    }
-    label {
-        color: #1E2128;
-        text-align: left;
-        font-weight: 300;
-    }
-    input, textarea {
-        border-radius: 8px;
-        border-color: #000000;
-    }
-    input {
-        height: 50px;
-    }
 }
 
 .blog-form-btn {

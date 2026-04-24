@@ -1,4 +1,8 @@
-<app-admin-panel [articlesCount]="articlesCount"></app-admin-panel>
+<app-admin-panel
+(openModal)="openModalForm()"
+(openStats)="openModalStats()"
+></app-admin-panel>
+
 <section class="blogs">
     <div class="blogs-title-grid">
         <div class="blogs-title-block">
@@ -16,9 +20,10 @@
                 <app-post 
                 [title]="article.title" 
                 [content]="article.content"
-                [isFirst]="article.id === 0"
+                [isFirst]="$first"
                 [id]="article.id"
-                (delete)="deleteArticle($event)">
+                (delete)="deleteArticle($event)"
+                (edit)="editArticle($event)">
                 </app-post>
             }
 
@@ -37,3 +42,23 @@
         </svg>
     </button>
 </section>
+
+<app-edit-form-modal
+*ngIf="isEditModalOpen"
+[article]="editingArticle"
+(save)="onSaveArticle($event)"
+(close)="closeModal()">
+</app-edit-form-modal>
+
+<app-form-modal
+*ngIf="isAddModalOpen"
+[articlesCount]="articlesCount"
+(save)="onSaveArticle($event)"
+(close)="closeModal()">
+</app-form-modal>
+
+<app-stats-modal
+*ngIf="isStatsModalOpen"
+[articlesCount]="articlesCount"
+(close)="closeModal()">
+</app-stats-modal>

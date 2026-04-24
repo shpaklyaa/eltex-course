@@ -2,8 +2,8 @@
     <div class="modal" id="modal">
         <div class="blog-form-box">
             <form [formGroup]="form" class="blog-form">
-                <h1>Добавить статью</h1>
-                
+                <h1>Редактировать статью</h1>
+
                 <label for="title">Заголовок</label>
                 <input formControlName = "title" type="text" id="title" name="title" required placeholder="Заголовок статьи">
 
@@ -18,8 +18,8 @@
                     <div class="alert">Текст не может содержать меньше 25 и больше 120 символов!</div>
                 }
 
-                <button (click)="onSave()" [disabled]="form.invalid" class="blog-form-btn" type="button">Добавить</button>
-                <button (click)="onClose()"class="btn"  id="close-btn" type="button">Отмена</button>
+                <button (click)="onSave()" [disabled]="form.invalid" class="blog-form-btn" type="button">Сохранить</button>
+                <button (click)="onClose()" class="btn"  id="close-btn" type="button">Отмена</button>
                 <!-- <div class="loading-message">
                     <div class="spinner"></div>
                     <span>Добавление статьи...</span>

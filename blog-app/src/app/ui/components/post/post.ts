@@ -13,6 +13,7 @@ export class Post {
   @Input() isFirst: boolean = false;
 
   @Output() delete = new EventEmitter<number>();
+  @Output() edit = new EventEmitter<number>();
 
   @HostBinding('attr.is-first') get isFirstChild() {
     return this.isFirst ? 'true' : null;
@@ -21,5 +22,9 @@ export class Post {
   onDelete() {
     console.log('[Post] Delete button clicked for id:', this.id);
     this.delete.emit(this.id);
+  }
+
+  onEdit() {
+    this.edit.emit(this.id);
   }
 }
