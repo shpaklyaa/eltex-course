@@ -8,28 +8,17 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 })
 export class StatsModal {
   @Input() articlesCount!: number;
-  visible: boolean = false;
+  @Output() close = new EventEmitter<void>;
 
-  openStats() {
-    console.log('[StatsModal] open() called');
-    this.visible = true;
-    console.log('[StatsModal] visible =', this.visible);
+  onClose() {
+    this.close.emit();
   }
 
-  close() {
-    console.log('[StatsModal] open() called');
-    this.visible = false;
-    console.log('[StatsModal] visible =', this.visible);
-  }
 
   closeOnBackdropClick(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
-      console.log('[StatsModal] open() called');
-      this.close();
-      console.log('[StatsModal] visible =', this.visible);
+      console.log('[FormModal] open() called');
+      this.onClose();
     }
-  }
-  ngOnInit() {
-    console.log('[StatsModal] articlesCount =', this.articlesCount);
   }
 }

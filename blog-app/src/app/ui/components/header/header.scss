@@ -8,7 +8,7 @@
     margin-top: 30px;
 }
 
-.navbar{
+.navbar {
     display: flex;
     justify-content: end;
     margin: 0;
@@ -18,16 +18,21 @@
     gap: 1.5rem;
 }
 
-.navbar a {
+a {
     text-decoration: none;
     color: $secondary-color;
     font-size: 1rem;
     transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
-.navbar a:hover {
+a:hover {
     color: $hover-color;
     font-weight: bold;
     transition: color 0.3s ease, font-weight 0.3s ease;
     cursor: pointer;
+}
+
+.active {
+    color: rgb(18, 129, 14);
+    font-weight: bold;
 }

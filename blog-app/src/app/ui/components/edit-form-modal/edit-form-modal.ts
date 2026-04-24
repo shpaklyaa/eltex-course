@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Article } from '../../../types/article';
 
 @Component({
@@ -17,10 +17,10 @@ export class EditFormModal {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      title: [''],
-      content: ['']
+  constructor(){
+    this.form = new FormGroup({
+        "title": new FormControl("", [Validators.required,  Validators.minLength(25), Validators.maxLength(30)]),
+        "content": new FormControl("", [ Validators.required,  Validators.minLength(25), Validators.maxLength(120)]),
     });
   }
 
@@ -34,12 +34,6 @@ export class EditFormModal {
       console.warn('No article provided to EditFormModal');
     }
   }
-
-  // open(article: Article) {
-  //   console.log('[FormModal] open() called');
-  //   this.article = article;
-
-  // }
 
   onClose() {
     this.close.emit();

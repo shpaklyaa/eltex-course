@@ -60,10 +60,12 @@ export class Blog {
 
   onSaveArticle(updatedArticle: Article) {
     const index = this.articles.findIndex(article => article.id === updatedArticle.id);
-    if (index !== -1) {
-      this.articles[index] = updatedArticle;
+    if (this.editingArticle) {
+      if (index !== -1) {
+        this.articles[index] = updatedArticle;
+      }
     } else {
-        const newArticle = { ...updatedArticle, id: this.articlesCount};
+        const newArticle = { ...updatedArticle, id: this.articles.length};
         this.articles.push(newArticle);
       }
     this.closeModal();

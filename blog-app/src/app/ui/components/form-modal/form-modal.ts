@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter} from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Article } from '../../../types/article';
 
 @Component({
@@ -18,13 +18,13 @@ export class FormModal {
   
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      title: [''],
-      content: ['']
+  constructor(){
+    this.form = new FormGroup({
+        "title": new FormControl("", [Validators.required,  Validators.minLength(25), Validators.maxLength(30)]),
+        "content": new FormControl("", [ Validators.required,  Validators.minLength(25), Validators.maxLength(120)]),
     });
   }
-
+  
   onClose() {
     this.close.emit();
   }

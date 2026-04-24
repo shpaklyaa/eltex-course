@@ -20,7 +20,7 @@
                 <app-post 
                 [title]="article.title" 
                 [content]="article.content"
-                [isFirst]="article.id === 0"
+                [isFirst]="$first"
                 [id]="article.id"
                 (delete)="deleteArticle($event)"
                 (edit)="editArticle($event)">

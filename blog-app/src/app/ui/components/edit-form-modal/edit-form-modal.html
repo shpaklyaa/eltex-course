@@ -7,10 +7,18 @@
                 <label for="title">Заголовок</label>
                 <input formControlName = "title" type="text" id="title" name="title" required placeholder="Заголовок статьи">
 
+                @if(form.controls["title"].invalid && form.controls["title"].touched){
+                    <div class="alert">Заголовок не может содержать меньше 25 и больше 30 символов!</div>
+                }
+
                 <label for="content">Текст статьи</label>
                 <textarea formControlName = "content" id="content" name="content" rows="5" required placeholder="Текст статьи"></textarea>
 
-                <button (click)="onSave()" class="blog-form-btn" type="button">Сохранить</button>
+                @if(form.controls["content"].invalid && form.controls["content"].touched){
+                    <div class="alert">Текст не может содержать меньше 25 и больше 120 символов!</div>
+                }
+
+                <button (click)="onSave()" [disabled]="form.invalid" class="blog-form-btn" type="button">Сохранить</button>
                 <button (click)="onClose()" class="btn"  id="close-btn" type="button">Отмена</button>
                 <!-- <div class="loading-message">
                     <div class="spinner"></div>

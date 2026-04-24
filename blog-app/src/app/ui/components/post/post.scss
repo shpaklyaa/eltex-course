@@ -25,13 +25,14 @@
         background-color: #FAFAFA;
         text-align: left;
         padding-left: 30px;
+        padding-right: 30px;
         padding-top: 40px;
     }
 }
 
 .blog-article {
     display: grid;
-    max-width: 600px;
+    max-width: 380px;
     grid-template-rows: 3fr 1fr;
     text-align: start;
     transition: 0.3s ease;
@@ -53,6 +54,12 @@
     font-size: 24px;
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+.text-container-blog-article {
+    white-space: normal;
+    word-break: break-word;
+    -webkit-box-orient: vertical; 
 }
 
 .blog-article:not(:first-child) .article-content {
