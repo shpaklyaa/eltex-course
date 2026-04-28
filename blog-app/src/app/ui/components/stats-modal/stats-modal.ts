@@ -1,4 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Article } from '../../../types/article';
 
 @Component({
   selector: 'app-stats-modal',
@@ -7,13 +8,13 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
   styleUrl: './stats-modal.scss',
 })
 export class StatsModal {
-  @Input() articlesCount!: number;
+  @Input() article!: Article;
+  @Input() articlesCount!: Number;
   @Output() close = new EventEmitter<void>;
 
   onClose() {
     this.close.emit();
   }
-
 
   closeOnBackdropClick(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {

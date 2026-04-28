@@ -29,14 +29,22 @@ export class FormModal {
     this.close.emit();
   }
 
-  onSave(): void {
-    const newArticle: Article = {
-      id: this.articlesCount,
-      title: this.form.value.title,
-      content: this.form.value.content
-    };
-    this.save.emit(newArticle);
-    this.onClose();
+  // onSave(): void {
+  //   const newArticle: Article = {
+  //     id: this.articlesCount,
+  //     title: this.form.value.title,
+  //     content: this.form.value.content
+  //   };
+  //   this.save.emit(newArticle);
+  //   this.onClose();
+  // }
+
+  onSave() {
+    if (this.form.valid) {
+      const data = this.form.value;
+      this.save.emit(data);
+      this.onClose();
+    }
   }
 
   closeOnBackdropClick(event: MouseEvent) {

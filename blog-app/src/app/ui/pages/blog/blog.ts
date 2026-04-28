@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { EditFormModal } from '../../components/edit-form-modal/edit-form-modal';
@@ -6,6 +6,10 @@ import { Post } from '../../components/post/post';
 import { Article } from '../../.././types/article';
 import { FormModal } from '../../components/form-modal/form-modal';
 import { StatsModal } from '../../components/stats-modal/stats-modal';
+import { ArticlesService } from '../../../services/articles-service.interface';
+import { ArticlesStoreService } from '../../../services/articles-store.service';
+import { ArticlesServiceImpl } from '../../../services/articles.service';
+import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
 
 @Component({
   selector: 'app-blog',
@@ -17,10 +21,13 @@ import { StatsModal } from '../../components/stats-modal/stats-modal';
     FormModal,
     StatsModal
   ],
+  providers: [
+    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl }
+  ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
 })
-export class Blog {
+export class Blog implements OnInit {
   @ViewChild(EditFormModal) modalEdit!: EditFormModal;
   @ViewChild(EditFormModal) modalBackdropEdit!: EditFormModal;
   @ViewChild(FormModal) modal!: FormModal;
@@ -32,47 +39,101 @@ export class Blog {
   isAddModalOpen = false;
   isStatsModalOpen = false;
 
-  articles: Article[] = [
-    { id: 0, title: 'Angular Basics', content: 'Learn the fundamentals of Angular.' },
-    { id: 1, title: 'Angular Basics', content: 'Learn the fundamentals of Angular.' },
-    { id: 2, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
-    { id: 3, title: 'Styling Components', content: 'Style your components effectively.' },
-    { id: 4, title: 'Angular Basics', content: 'Learn the fundamentals of Angular.' },
-    { id: 5, title: 'Routing in Angular', content: 'Master navigation with Angular Router.' },
-    { id: 6, title: 'Styling Components', content: 'Style your components effectively.' }
-  ]
-
   editingArticle: Article | undefined = undefined;
 
-  get articlesCount(): number {
-    return this.articles.length;
+  constructor(
+    @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
+    private store: ArticlesStoreService
+  ) {}
+
+  ngOnInit() {
+    if (this.store.articles.length === 0) {
+      this.articlesService.getAll().subscribe(articles => {
+      });
+    }
   }
 
-  deleteArticle(id: number) {
-    this.articles = this.articles.filter(article => article.id !== id);
+  get totalArticles() {
+    return this.articlesService.getTotalCount();
   }
 
-  editArticle(id: number) {
-    console.log(`[Blog] Editing article with id: ${id}`);
-    this.editingArticle = this.articles.find(article => article.id === id);
-    this.isEditModalOpen = true;
+  get paginatedArticles() {
+    return this.store.getPaginatedArticles();
   }
 
-  onSaveArticle(updatedArticle: Article) {
-    const index = this.articles.findIndex(article => article.id === updatedArticle.id);
-    if (this.editingArticle) {
-      if (index !== -1) {
-        this.articles[index] = updatedArticle;
-      }
-    } else {
-        const newArticle = { ...updatedArticle, id: this.articles.length};
-        this.articles.push(newArticle);
-      }
-    this.closeModal();
+  get currentPage() {
+    return this.store.currentPage;
+  }
+
+  get pageNumbers(): number[] {
+  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
+
+  get totalPages() {
+    return this.store.totalPages;
+  }
+
+  goToPage(page: number): void {
+    this.store.currentPage = page;
+  }
+
+  createArticle(article: Article): void {
+    this.articlesService.create(article).subscribe(newArticle => {
+      console.log('Статья добавлена:', newArticle);
+      this.closeModal();
+    });
+  }
+
+  // updateArticle(article: Article): void {
+  //   this.openEditModal(article);
+  //   this.articlesService.update(article).subscribe(updated => {
+  //     console.log('Обновлено:', updated);
+  //   });
+  // }
+
+  // saveArticle(data: { title: string; content: string }) {
+  //   this.articlesService.create(data).subscribe();
+  //   console.log('Сохранено:', data);
+  // }
+  saveArticle(articleData: Partial<Article>): void {
+  if ('id' in articleData && articleData.id != null) {
+    // Обновление — передаём как Article
+    const fullArticle: Article = {
+      id: articleData.id!,
+      title: articleData.title ?? '',
+      content: articleData.content ?? ''
+    };
+    this.articlesService.update(fullArticle).subscribe({
+      next: () => {
+        console.log('Обновлено');
+        this.closeModal();
+      },
+      error: err => console.error('Ошибка:', err)
+    });
+  } else {
+    // Создание — передаём как Omit<Article, 'id'>
+    const newArticle = {
+      title: articleData.title ?? '',
+      content: articleData.content ?? ''
+    };
+    this.articlesService.create(newArticle).subscribe({
+      next: () => {
+        console.log('Создано');
+        this.closeModal();
+      },
+      error: err => console.error('Ошибка:', err)
+      });
+    }
+  }
+
+  deleteArticle(id: number): void {
+    this.articlesService.delete(id).subscribe(() => {
+      console.log('Удалено:', id);
+    });
   }
 
   closeModal(): void {
-    this.editingArticle = undefined;
+    // this.editingArticle = undefined;
     this.isEditModalOpen = false;
     this.isAddModalOpen = false;
     this.isStatsModalOpen = false;
@@ -80,6 +141,11 @@ export class Blog {
 
   openModalForm() {
     this.isAddModalOpen = true;
+  }
+
+  openEditModal(article: Article): void {
+    this.editingArticle = article;
+    this.isEditModalOpen = true;
   }
 
   openModalStats() {

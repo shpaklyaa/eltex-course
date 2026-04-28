@@ -1,4 +1,5 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { Article } from '../../../types/article';
 
 @Component({
   selector: 'app-post',
@@ -7,24 +8,20 @@ import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/co
   styleUrl: './post.scss',
 })
 export class Post {
-  @Input() title!: string;
-  @Input() content!: string;
-  @Input() id!: number
-  @Input() isFirst: boolean = false;
+  @Input() article!: Article;
 
   @Output() delete = new EventEmitter<number>();
-  @Output() edit = new EventEmitter<number>();
+  @Output() edit = new EventEmitter<Article>();
 
-  @HostBinding('attr.is-first') get isFirstChild() {
-    return this.isFirst ? 'true' : null;
-  }
+  // @HostBinding('attr.is-first') get isFirstChild() {
+  //   return this.isFirst ? 'true' : null;
+  // }
 
   onDelete() {
-    console.log('[Post] Delete button clicked for id:', this.id);
-    this.delete.emit(this.id);
+    this.delete.emit(this.article.id);
   }
 
   onEdit() {
-    this.edit.emit(this.id);
+    this.edit.emit(this.article);
   }
 }

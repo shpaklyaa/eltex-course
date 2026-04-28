@@ -16,14 +16,11 @@
 
     <div class="blogs">
         <div class="blogs-grid">
-            @for (article of articles; track $index) {
+            @for (article of paginatedArticles; track article.id) {
                 <app-post 
-                [title]="article.title" 
-                [content]="article.content"
-                [isFirst]="$first"
-                [id]="article.id"
-                (delete)="deleteArticle($event)"
-                (edit)="editArticle($event)">
+                [article]="article" 
+                (delete)="deleteArticle(article.id)"
+                (edit)="openEditModal(article)">
                 </app-post>
             }
 
@@ -41,24 +38,34 @@
             <path d="M18.7071 8.07112C19.0976 7.6806 19.0976 7.04743 18.7071 6.65691L12.3431 0.292947C11.9526 -0.0975775 11.3195 -0.0975775 10.9289 0.292947C10.5384 0.683471 10.5384 1.31664 10.9289 1.70716L16.5858 7.36402L10.9289 13.0209C10.5384 13.4114 10.5384 14.0446 10.9289 14.4351C11.3195 14.8256 11.9526 14.8256 12.3431 14.4351L18.7071 8.07112ZM0 7.36401L-8.74228e-08 8.36401L18 8.36402L18 7.36402L18 6.36402L8.74228e-08 6.36401L0 7.36401Z" fill="#75BB7C"/>
         </svg>
     </button>
+
+    <div class="pagination">
+        @for (page of pageNumbers; track page) {
+            <button
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)">
+                {{ page }}
+            </button>
+        }
+    </div>
+
 </section>
 
 <app-edit-form-modal
 *ngIf="isEditModalOpen"
-[article]="editingArticle"
-(save)="onSaveArticle($event)"
+[article]="editingArticle" 
+(save)="saveArticle($event)"
 (close)="closeModal()">
 </app-edit-form-modal>
 
 <app-form-modal
 *ngIf="isAddModalOpen"
-[articlesCount]="articlesCount"
-(save)="onSaveArticle($event)"
+(save)="saveArticle($event)"
 (close)="closeModal()">
 </app-form-modal>
 
 <app-stats-modal
 *ngIf="isStatsModalOpen"
-[articlesCount]="articlesCount"
+
 (close)="closeModal()">
 </app-stats-modal>

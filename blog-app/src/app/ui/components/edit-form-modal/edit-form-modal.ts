@@ -26,10 +26,7 @@ export class EditFormModal {
 
   ngOnInit(): void {
     if (this.article) {
-      this.form.patchValue({
-        title: this.article.title,
-        content: this.article.content
-      });
+      this.form.patchValue(this.article);
     } else {
       console.warn('No article provided to EditFormModal');
     }
@@ -46,17 +43,15 @@ export class EditFormModal {
     }
   }
 
-  onSave(): void {
-    if (!this.article || !this.form.valid) {
-    console.warn('Cannot save: article not provided or form invalid');
-    return;
-    }
-    const updatedArticle: Article = {
+  onSave() {
+    if (this.form.valid && this.article) {
+      const updatedArticle: Article = {
       id: this.article.id,
-      title: this.form.value.title!,
-      content: this.form.value.content!
-    };
-    this.save.emit(updatedArticle);
-    this.onClose();
+      title: this.form.value.title,
+      content: this.form.value.content
+      };
+      this.save.emit(updatedArticle);
+      this.onClose();
+    }
   }
 }
