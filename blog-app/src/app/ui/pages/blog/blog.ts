@@ -53,8 +53,13 @@ export class Blog implements OnInit {
     }
   }
 
-  get totalArticles() {
-    return this.articlesService.getTotalCount();
+  isFirstOnPage(article: Article): boolean {
+    const paginatedArticles = this.store.getPaginatedArticles();
+    return paginatedArticles.length > 0 && paginatedArticles[0].id === article.id;
+  }
+
+  get statsData() {
+    return { totalArticles: this.store.articles.length }
   }
 
   get paginatedArticles() {
@@ -84,46 +89,31 @@ export class Blog implements OnInit {
     });
   }
 
-  // updateArticle(article: Article): void {
-  //   this.openEditModal(article);
-  //   this.articlesService.update(article).subscribe(updated => {
-  //     console.log('Обновлено:', updated);
-  //   });
-  // }
-
-  // saveArticle(data: { title: string; content: string }) {
-  //   this.articlesService.create(data).subscribe();
-  //   console.log('Сохранено:', data);
-  // }
   saveArticle(articleData: Partial<Article>): void {
-  if ('id' in articleData && articleData.id != null) {
-    // Обновление — передаём как Article
-    const fullArticle: Article = {
-      id: articleData.id!,
-      title: articleData.title ?? '',
-      content: articleData.content ?? ''
-    };
-    this.articlesService.update(fullArticle).subscribe({
-      next: () => {
-        console.log('Обновлено');
-        this.closeModal();
-      },
-      error: err => console.error('Ошибка:', err)
-    });
-  } else {
-    // Создание — передаём как Omit<Article, 'id'>
-    const newArticle = {
-      title: articleData.title ?? '',
-      content: articleData.content ?? ''
-    };
-    this.articlesService.create(newArticle).subscribe({
-      next: () => {
-        console.log('Создано');
-        this.closeModal();
-      },
-      error: err => console.error('Ошибка:', err)
+    if ('id' in articleData && articleData.id != null) {
+      const fullArticle: Article = {
+        id: articleData.id!,
+        title: articleData.title ?? '',
+        content: articleData.content ?? ''
+      };
+      this.articlesService.update(fullArticle).subscribe({
+        next: () => {
+          console.log('Обновлено');
+          this.closeModal();
+        }
       });
-    }
+      } else {
+      const newArticle = {
+        title: articleData.title ?? '',
+        content: articleData.content ?? ''
+      };
+      this.articlesService.create(newArticle).subscribe({
+        next: () => {
+          console.log('Создано');
+          this.closeModal();
+        },
+        });
+      }
   }
 
   deleteArticle(id: number): void {
@@ -133,7 +123,6 @@ export class Blog implements OnInit {
   }
 
   closeModal(): void {
-    // this.editingArticle = undefined;
     this.isEditModalOpen = false;
     this.isAddModalOpen = false;
     this.isStatsModalOpen = false;

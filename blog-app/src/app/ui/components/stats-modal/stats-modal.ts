@@ -9,7 +9,10 @@ import { Article } from '../../../types/article';
 })
 export class StatsModal {
   @Input() article!: Article;
-  @Input() articlesCount!: Number;
+  @Input() statsData!: {
+    totalArticles: number;
+  }
+  // @Input() articlesCount!: Number;
   @Output() close = new EventEmitter<void>;
 
   onClose() {

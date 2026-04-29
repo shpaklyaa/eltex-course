@@ -1,4 +1,4 @@
-import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { Component, Input, Output, HostBinding, EventEmitter, input } from '@angular/core';
 import { Article } from '../../../types/article';
 
 @Component({
@@ -9,13 +9,14 @@ import { Article } from '../../../types/article';
 })
 export class Post {
   @Input() article!: Article;
+  @Input() isFirst = false;
 
   @Output() delete = new EventEmitter<number>();
   @Output() edit = new EventEmitter<Article>();
 
-  // @HostBinding('attr.is-first') get isFirstChild() {
-  //   return this.isFirst ? 'true' : null;
-  // }
+  @HostBinding('attr.is-first') get isFirstChild() {
+    return this.isFirst ? 'true' : null;
+  }
 
   onDelete() {
     this.delete.emit(this.article.id);
