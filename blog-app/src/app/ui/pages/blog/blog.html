@@ -20,7 +20,7 @@
                 <app-post 
                 [article]="article" 
                 (delete)="deleteArticle(article.id)"
-                (edit)="openEditModal(article)"
+                (edit)="openModalForm(article)"
                 [isFirst]="isFirstOnPage(article)">
                 </app-post>
             }
@@ -52,21 +52,24 @@
 
 </section>
 
-<app-edit-form-modal
+<!-- <app-edit-form-modal
 *ngIf="isEditModalOpen"
 [article]="editingArticle" 
 (save)="saveArticle($event)"
 (close)="closeModal()">
-</app-edit-form-modal>
+</app-edit-form-modal> -->
 
-<app-form-modal
-*ngIf="isAddModalOpen"
-(save)="saveArticle($event)"
-(close)="closeModal()">
-</app-form-modal>
+@if (isArticleModalOpen()) {
+    <app-form-modal
+        [article]="editingArticle" 
+        (save)="saveArticle($event)"
+        (close)="closeModal()">
+    </app-form-modal>
+}
 
-<app-stats-modal
-*ngIf="isStatsModalOpen"
-[statsData]="statsData"
-(close)="closeModal()">
-</app-stats-modal>
+@if (isStatsModalOpen()) {
+    <app-stats-modal
+        [statsData]="statsData"
+        (close)="closeModal()">
+    </app-stats-modal>
+}

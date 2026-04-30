@@ -1,0 +1,30 @@
+@import '../../../../variables.scss';
+
+.skills-section {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.skills-title {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.skill-item {
+    height: 60px;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-bottom: 2px solid #68686b79;
+}

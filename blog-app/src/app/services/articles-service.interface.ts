@@ -3,9 +3,9 @@ import { Article } from '../types/article';
 
 export interface ArticlesService {
   getAll(): Observable<Article[]>;
-  getById(id: number): Observable<Article | undefined>;
+  getById(id: string): Observable<Article | undefined>;
   create(article: Omit<Article, 'id'>): Observable<Article>;
   update(article: Article): Observable<Article>;
-  delete(id: number): Observable<void>;
+  delete(id: string): Observable<void>;
   getTotalCount(): Observable<number>;
 }

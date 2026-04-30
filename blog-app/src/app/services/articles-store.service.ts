@@ -8,6 +8,16 @@ export class ArticlesStoreService {
   private _articles: Article[] = [];
   private _currentPage = 1;
   private _pageSize = 7;
+  private _lastTwoArts: Article[] = [];
+
+  get latestTwoArticles(): Article[] {
+    return this._articles.slice(-2);
+  }
+
+  addLatestTwoArticles() {
+    const latestTwo = this.latestTwoArticles;
+    this._lastTwoArts.push(...latestTwo);
+  }
 
   get articles(): Article[] {
     return [...this._articles];

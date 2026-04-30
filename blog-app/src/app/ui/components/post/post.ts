@@ -11,18 +11,18 @@ export class Post {
   @Input() article!: Article;
   @Input() isFirst = false;
 
-  @Output() delete = new EventEmitter<number>();
+  @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<Article>();
 
   @HostBinding('attr.is-first') get isFirstChild() {
     return this.isFirst ? 'true' : null;
   }
 
-  onDelete() {
+  protected onDelete() {
     this.delete.emit(this.article.id);
   }
 
-  onEdit() {
+  protected onEdit() {
     this.edit.emit(this.article);
   }
 }

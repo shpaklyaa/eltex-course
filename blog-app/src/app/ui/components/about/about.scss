@@ -1,0 +1,50 @@
+@import '../../../../variables.scss';
+
+.section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    align-items: center;
+}
+
+.myblogs-image {
+    position: absolute;
+    left: 930px;
+    bottom: 400px;
+}
+
+.text-block {
+    display: grid;
+    grid-template-rows: 0.5fr 1fr;
+    gap: 30px;
+}
+
+.desc-container {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    
+    p {
+        line-height: 25px;
+        color: $secondary-color;
+    }
+
+    a {
+        color: $hover-color;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s ease, font-weight 0.3s ease;
+    }
+
+    a:hover {
+    color: $primary-color;
+    }
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+}

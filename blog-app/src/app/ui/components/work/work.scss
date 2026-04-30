@@ -1,0 +1,34 @@
+@import '../../../../variables.scss';
+
+.work-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    align-content: center;
+    margin: auto;
+    margin-top: 10rem;
+}
+
+.work-card {
+    display: grid;
+    grid-template-columns: 1fr 8fr;
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid #68686b79;
+}
+
+.work-card-image-container {
+    margin: auto;
+    padding-bottom: 60px;
+}
+
+.work-card-text h4:first-of-type {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.work-desc p:first-of-type{
+    padding-top: 30px;
+}

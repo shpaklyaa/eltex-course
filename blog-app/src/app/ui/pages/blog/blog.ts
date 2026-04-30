@@ -1,7 +1,6 @@
-import { Component, ViewChild, OnInit, Inject } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
-import { EditFormModal } from '../../components/edit-form-modal/edit-form-modal';
 import { Post } from '../../components/post/post';
 import { Article } from '../../.././types/article';
 import { FormModal } from '../../components/form-modal/form-modal';
@@ -16,7 +15,6 @@ import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
   imports: [
     Post,
     AdminPanel,
-    EditFormModal,
     CommonModule,
     FormModal,
     StatsModal
@@ -28,16 +26,13 @@ import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
   styleUrl: './blog.scss',
 })
 export class Blog implements OnInit {
-  @ViewChild(EditFormModal) modalEdit!: EditFormModal;
-  @ViewChild(EditFormModal) modalBackdropEdit!: EditFormModal;
   @ViewChild(FormModal) modal!: FormModal;
   @ViewChild(FormModal) modalBackdrop!: FormModal;
   @ViewChild(StatsModal) modalStats!: StatsModal;
   @ViewChild(StatsModal) modalBackdropStats!: StatsModal;
 
-  isEditModalOpen = false;
-  isAddModalOpen = false;
-  isStatsModalOpen = false;
+  protected isArticleModalOpen = signal(false);
+  protected isStatsModalOpen = signal(false);
 
   editingArticle: Article | undefined = undefined;
 
@@ -53,43 +48,36 @@ export class Blog implements OnInit {
     }
   }
 
-  isFirstOnPage(article: Article): boolean {
+  protected isFirstOnPage(article: Article): boolean {
     const paginatedArticles = this.store.getPaginatedArticles();
     return paginatedArticles.length > 0 && paginatedArticles[0].id === article.id;
   }
 
-  get statsData() {
+  public get statsData() {
     return { totalArticles: this.store.articles.length }
   }
 
-  get paginatedArticles() {
+  protected get paginatedArticles() {
     return this.store.getPaginatedArticles();
   }
 
-  get currentPage() {
+  protected get currentPage() {
     return this.store.currentPage;
   }
 
-  get pageNumbers(): number[] {
+  protected get pageNumbers(): number[] {
   return Array.from({ length: this.totalPages }, (_, i) => i + 1);
 }
 
-  get totalPages() {
+  public get totalPages() {
     return this.store.totalPages;
   }
 
-  goToPage(page: number): void {
+  protected goToPage(page: number): void {
     this.store.currentPage = page;
   }
 
-  createArticle(article: Article): void {
-    this.articlesService.create(article).subscribe(newArticle => {
-      console.log('Статья добавлена:', newArticle);
-      this.closeModal();
-    });
-  }
-
-  saveArticle(articleData: Partial<Article>): void {
+  protected saveArticle(articleData: Partial<Article>): void {
     if ('id' in articleData && articleData.id != null) {
       const fullArticle: Article = {
         id: articleData.id!,
@@ -102,42 +90,37 @@ export class Blog implements OnInit {
           this.closeModal();
         }
       });
-      } else {
+    } else {
       const newArticle = {
         title: articleData.title ?? '',
         content: articleData.content ?? ''
       };
       this.articlesService.create(newArticle).subscribe({
         next: () => {
-          console.log('Создано');
+          console.log('Статья добавлена:');
           this.closeModal();
         },
-        });
-      }
+      });
+    }
   }
 
-  deleteArticle(id: number): void {
+  protected deleteArticle(id: string): void {
     this.articlesService.delete(id).subscribe(() => {
       console.log('Удалено:', id);
     });
   }
 
-  closeModal(): void {
-    this.isEditModalOpen = false;
-    this.isAddModalOpen = false;
-    this.isStatsModalOpen = false;
+  protected closeModal(): void {
+    this.isStatsModalOpen.set(false);
+    this.isArticleModalOpen.set(false);
   }
 
-  openModalForm() {
-    this.isAddModalOpen = true;
-  }
-
-  openEditModal(article: Article): void {
+  protected openModalForm(article?: Article): void {
+    this.isArticleModalOpen.set(true);
     this.editingArticle = article;
-    this.isEditModalOpen = true;
   }
 
-  openModalStats() {
-    this.isStatsModalOpen = true;
+  protected openModalStats() {
+    this.isStatsModalOpen.set(true);
   }
 }

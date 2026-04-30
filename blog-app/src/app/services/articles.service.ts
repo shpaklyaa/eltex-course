@@ -26,7 +26,7 @@ export class ArticlesServiceImpl implements ArticlesService {
         return of(articles);
     }
 
-    getById(id: number): Observable<Article | undefined> {
+    getById(id: string): Observable<Article | undefined> {
         const articles = getStoredArticles();
         const article = articles.find(a => a.id === id);
         return of(article);
@@ -34,7 +34,7 @@ export class ArticlesServiceImpl implements ArticlesService {
 
     create(articleData: Omit<Article, 'id'>): Observable<Article> {
         const articles = getStoredArticles();
-        const newId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) + 1 : 1;
+        const newId = crypto.randomUUID();
         const newArticle: Article = {
             id: newId,
             ...articleData
@@ -58,7 +58,7 @@ export class ArticlesServiceImpl implements ArticlesService {
         return of(updatedArticle);
     }
 
-    delete(id: number): Observable<void> {
+    delete(id: string): Observable<void> {
         const articles = getStoredArticles();
         const updatedArticles = articles.filter(a => a.id !== id);
         saveToStorage(updatedArticles);
