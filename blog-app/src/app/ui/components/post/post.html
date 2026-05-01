@@ -1,10 +1,10 @@
-<article class="blog-article" id="post">
+<article class="blog-article" id="post" [class.is-first]="isFirst">
     <div class="image-container-blog-article">
         <img src="./assets/images/imagenotloaded.png" class="bg-image" alt="">
     </div>
     <div class="text-container-blog-article">
-        <h3 class="article-title">{{title}}</h3>
-        <p class="article-content">{{content}}</p>
+        <h3 class="article-title">{{article.title}}</h3>
+        <p class="article-content">{{article.content}}</p>
         <time class="article-date">14 oct, 2026</time> 
     </div>
     <button class="edit-btn" (click)="onEdit()">

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, input, effect} from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Article } from '../../../types/article';
 
@@ -11,11 +11,11 @@ import { Article } from '../../../types/article';
   styleUrl: './form-modal.scss',
 })
 export class FormModal {
-  @Input() article?: Article;
-  @Input() articlesCount!: number;
-  @Output() save = new EventEmitter<Article>();
+  @Output() save = new EventEmitter<Partial<Article>>();
   @Output() close = new EventEmitter<void>();
   
+  public article = input<Article | undefined>();
+
   form: FormGroup;
 
   constructor(){
@@ -23,20 +23,57 @@ export class FormModal {
         "title": new FormControl("", [Validators.required,  Validators.minLength(25), Validators.maxLength(30)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(25), Validators.maxLength(120)]),
     });
+
+    this.editDataEffect();
   }
-  
-  onClose() {
-    this.close.emit();
+
+  protected formTitle = computed(() => {
+    const art = this.article();
+    return art ? 'Редактировать статью' : 'Добавить статью'
+  });
+
+  protected saveButtonLabel = computed(() => {
+    const art = this.article();
+    return art ? 'Сохранить' : 'Добавить'
+  });
+
+
+  private editDataEffect(): void {
+    effect(() => {
+      const editData: Article | undefined = this.article();
+
+      if (editData) {
+        this.form.reset(
+          { title: editData.title, content: editData.content });
+      } else {
+        this.form.reset();
+      }
+    });
   }
 
   onSave(): void {
-    const newArticle: Article = {
-      id: this.articlesCount,
-      title: this.form.value.title,
-      content: this.form.value.content
-    };
-    this.save.emit(newArticle);
-    this.onClose();
+    if (this.form.valid) {
+      const art = this.article();
+      if (art) {
+        const updatedArticle: Article = {
+          id: art.id,
+          title: this.form.value.title!,
+          content: this.form.value.content!
+        };
+        this.save.emit(updatedArticle);
+      } else {
+        const newArticle = {
+          title: this.form.value.title!,
+          content: this.form.value.content!
+        };
+        this.save.emit(newArticle);
+      }
+      this.close.emit();
+    }
+  }
+
+  onClose() {
+    this.close.emit();
   }
 
   closeOnBackdropClick(event: MouseEvent) {
