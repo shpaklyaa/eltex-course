@@ -16,7 +16,7 @@
 
     <div class="blogs">
         <div class="blogs-grid">
-            @for (article of paginatedArticles; track article.id) {
+            @for (article of paginatedArticles(); track article.id) {
                 <app-post 
                 [article]="article" 
                 (delete)="deleteArticle(article.id)"
@@ -51,13 +51,6 @@
     </div>
 
 </section>
-
-<!-- <app-edit-form-modal
-*ngIf="isEditModalOpen"
-[article]="editingArticle" 
-(save)="saveArticle($event)"
-(close)="closeModal()">
-</app-edit-form-modal> -->
 
 @if (isArticleModalOpen()) {
     <app-form-modal

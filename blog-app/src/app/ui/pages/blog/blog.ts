@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Inject, signal } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { Post } from '../../components/post/post';
@@ -42,10 +42,12 @@ export class Blog implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.store.articles.length === 0) {
+    if (this.store.arts().length === 0) {
       this.articlesService.getAll().subscribe(articles => {
       });
     }
+    console.log('paginatedArticles():', this.paginatedArticles());
+    console.log('Type:', Array.isArray(this.paginatedArticles()));
   }
 
   protected isFirstOnPage(article: Article): boolean {
@@ -54,20 +56,21 @@ export class Blog implements OnInit {
   }
 
   public get statsData() {
-    return { totalArticles: this.store.articles.length }
+    return { totalArticles: this.store.arts().length }
   }
 
-  protected get paginatedArticles() {
-    return this.store.getPaginatedArticles();
-  }
+  readonly paginatedArticles = computed(() => {
+    return this.store.currentPageArticles();
+  });
 
   protected get currentPage() {
     return this.store.currentPage;
   }
 
   protected get pageNumbers(): number[] {
-  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
-}
+    const totPages = this.totalPages();
+    return Array.from({ length: totPages }, (_, i) => i + 1);
+  }
 
   public get totalPages() {
     return this.store.totalPages;

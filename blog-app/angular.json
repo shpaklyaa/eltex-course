@@ -34,16 +34,7 @@
               "src/styles.scss",
               "src/variables.scss"
             ],
-            "styles": ["src/styles.scss"],
-            "baseHref": "/eltex-course/",
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "security": {
-              "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {

@@ -23,7 +23,7 @@ export class ArticlesServiceImpl implements ArticlesService {
     getAll(): Observable<Article[]> {
         const articles = getStoredArticles();
         this.store.saveArticles(articles);
-        return of(articles);
+        return of(this.store.articles);
     }
 
     getById(id: string): Observable<Article | undefined> {
@@ -33,36 +33,39 @@ export class ArticlesServiceImpl implements ArticlesService {
     }
 
     create(articleData: Omit<Article, 'id'>): Observable<Article> {
-        const articles = getStoredArticles();
         const newId = crypto.randomUUID();
         const newArticle: Article = {
             id: newId,
             ...articleData
         };
-        const updatedArticles = [...articles, newArticle];
-        saveToStorage(updatedArticles);
-        this.store.saveArticles(updatedArticles);
+        this.store._articles.update(articles => [...articles, newArticle]);
         return of(newArticle);
     }
 
     update(updatedArticle: Article): Observable<Article> {
-        const articles = getStoredArticles();
-        const index = articles.findIndex(a => a.id === updatedArticle.id);
-        if (index === -1) {
+        // Проверяем, существует ли статья с таким ID
+        const currentArticles = this.store._articles();
+        const exists = currentArticles.some(a => a.id === updatedArticle.id);
+
+        if (!exists) {
             throw new Error(`Article with id ${updatedArticle.id} not found`);
         }
-        const updatedArticles = [...articles];
-        updatedArticles[index] = updatedArticle;
-        saveToStorage(updatedArticles);
-        this.store.saveArticles(updatedArticles);
+        this.store._articles.update(articles =>
+            articles.map(a => a.id === updatedArticle.id ? updatedArticle : a)
+        );
         return of(updatedArticle);
     }
 
     delete(id: string): Observable<void> {
-        const articles = getStoredArticles();
-        const updatedArticles = articles.filter(a => a.id !== id);
-        saveToStorage(updatedArticles);
-        this.store.saveArticles(updatedArticles);
+        const currentArticles = this.store._articles();
+        const exists = currentArticles.some(a => a.id === id);
+        if (!exists) {
+            throw new Error(`Article with id ${id} not found`);
+        }
+        this.store._articles.update(articles =>
+            articles.filter(a => a.id !== id)
+        );
+
         return of(undefined);
     }
 

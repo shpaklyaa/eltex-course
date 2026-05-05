@@ -1,59 +1,69 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 import { Article } from '../types/article';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticlesStoreService {
-  private _articles: Article[] = [];
-  private _currentPage = 1;
-  private _pageSize = 7;
-  private _lastTwoArts: Article[] = [];
+  public _articles = signal<Article[]>([]);
+  public arts = this._articles;
+  private _currentPage = signal<number>(1);
+  private _pageSize = signal<number>(7);
 
-  get latestTwoArticles(): Article[] {
-    return this._articles.slice(-2);
-  }
+  readonly allArticles = computed(() => this._articles());
+  readonly curPage = computed(() => this._currentPage());
+  readonly pageSize = computed(() => this._pageSize());
+  readonly totalPages = computed(() => Math.ceil(this._articles().length / this._pageSize()));
 
-  addLatestTwoArticles() {
-    const latestTwo = this.latestTwoArticles;
-    this._lastTwoArts.push(...latestTwo);
-  }
+  readonly currentPageArticles = computed(() => {
+    const page = this._currentPage();
+    const size = this._pageSize();
+    const articles = this._articles();
+    const start = (page - 1) * size;
+    return articles.slice(start, start + size);
+  });
 
-  get articles(): Article[] {
-    return [...this._articles];
-  }
+  readonly latestTwoArticles = computed(() => {
+    const articles = this._articles();
+    return articles.slice(-2);
+  });
 
-  get currentPage(): number {
-    return this._currentPage;
-  }
+  constructor() {
+    const stored = localStorage.getItem('articles');
+    const parsed: Article[] = stored ? JSON.parse(stored) : [];
+    this._articles.set(Array.isArray(parsed) ? parsed : []);
 
-  get pageSize(): number {
-    return this._pageSize;
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this._articles.length / this._pageSize);
+    effect(() => {
+      const articles = this._articles();
+      try {
+        localStorage.setItem('articles', JSON.stringify(articles));
+      } catch (e) {
+        console.error('Failed to save articles to localStorage', e);
+      }
+    });
   }
 
   set articles(articles: Article[]) {
-    this._articles = [...articles];
+    const currentArticles = this._articles();
+    this._articles.set([...currentArticles])
   }
 
   set currentPage(page: number) {
-    this._currentPage = Math.max(1, page);
+    this._currentPage.set(Math.max(1, page));
   }
 
   getPaginatedArticles(): Article[] {
-    const start = (this._currentPage - 1) * this._pageSize;
-    const end = start + this._pageSize;
-    return this._articles.slice(start, end);
+    const start = (this._currentPage() - 1) * this._pageSize();
+    const end = start + this._pageSize();
+    return this._articles().slice(start, end);
   }
 
   saveArticles(articles: Article[]): void {
-    this._articles = [...articles];
+    const currentArticles = this._articles();
+    this._articles.set([...currentArticles])
   }
 
   savePagination(page: number): void {
-    this._currentPage = Math.max(1, page);
+    this._currentPage.set(Math.max(1, page));
   }
 }

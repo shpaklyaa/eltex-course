@@ -35,7 +35,7 @@ export class Home implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.store.articles.length === 0) {
+    if (this.store.arts().length === 0) {
       this.articlesService.getAll().subscribe(articles => {
       });
     }
@@ -46,7 +46,7 @@ export class Home implements OnInit {
   }
 
   protected isFirst(article: Article): boolean {
-    const latestTwoArticles = this.store.latestTwoArticles;
+    const latestTwoArticles = this.store.latestTwoArticles();
     return latestTwoArticles[0].id === article.id;
   }
 }
