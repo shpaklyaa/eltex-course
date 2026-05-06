@@ -12,7 +12,6 @@ export class StatsModal {
   @Input() statsData!: {
     totalArticles: number;
   }
-  // @Input() articlesCount!: Number;
   @Output() close = new EventEmitter<void>;
 
   onClose() {

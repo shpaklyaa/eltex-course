@@ -1,14 +1,16 @@
-import { Component, ViewChild, OnInit, Inject, signal, computed } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { Post } from '../../components/post/post';
 import { Article } from '../../.././types/article';
 import { FormModal } from '../../components/form-modal/form-modal';
 import { StatsModal } from '../../components/stats-modal/stats-modal';
-import { ArticlesService } from '../../../services/articles-service.interface';
-import { ArticlesStoreService } from '../../../services/articles-store.service';
-import { ArticlesServiceImpl } from '../../../services/articles.service';
-import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
+import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
+import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
+import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
 
 @Component({
   selector: 'app-blog',
@@ -38,16 +40,23 @@ export class Blog implements OnInit {
 
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
-    private store: ArticlesStoreService
+    private store: ArticlesStoreService,
+    private destroyRef: DestroyRef,
+    private router: Router
   ) {}
 
   ngOnInit() {
     if (this.store.arts().length === 0) {
-      this.articlesService.getAll().subscribe(articles => {
+      this.articlesService.getAll().pipe(
+      takeUntilDestroyed(this.destroyRef)).subscribe(articles => {
       });
     }
     console.log('paginatedArticles():', this.paginatedArticles());
     console.log('Type:', Array.isArray(this.paginatedArticles()));
+  }
+
+  public onPostClick(article: Article): void {
+    this.router.navigate(['/blog', 'post', article.id]);
   }
 
   protected isFirstOnPage(article: Article): boolean {
@@ -87,7 +96,7 @@ export class Blog implements OnInit {
         title: articleData.title ?? '',
         content: articleData.content ?? ''
       };
-      this.articlesService.update(fullArticle).subscribe({
+      this.articlesService.update(fullArticle).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           console.log('Обновлено');
           this.closeModal();
@@ -98,7 +107,8 @@ export class Blog implements OnInit {
         title: articleData.title ?? '',
         content: articleData.content ?? ''
       };
-      this.articlesService.create(newArticle).subscribe({
+      this.articlesService.create(newArticle).pipe(
+      takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           console.log('Статья добавлена:');
           this.closeModal();
@@ -108,7 +118,8 @@ export class Blog implements OnInit {
   }
 
   protected deleteArticle(id: string): void {
-    this.articlesService.delete(id).subscribe(() => {
+    this.articlesService.delete(id).pipe(
+      takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       console.log('Удалено:', id);
     });
   }

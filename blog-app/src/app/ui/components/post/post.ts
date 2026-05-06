@@ -13,9 +13,14 @@ export class Post {
 
   @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<Article>();
+  @Output() select = new EventEmitter<Article>();
 
   @HostBinding('attr.is-first') get isFirstChild() {
     return this.isFirst ? 'true' : null;
+  }
+
+  ngOnInit() {
+    console.log('Article:', this.article);
   }
 
   protected onDelete() {
@@ -24,5 +29,9 @@ export class Post {
 
   protected onEdit() {
     this.edit.emit(this.article);
+  }
+
+  protected onSelect() {
+    this.select.emit(this.article);
   }
 }

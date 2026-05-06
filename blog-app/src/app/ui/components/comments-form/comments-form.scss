@@ -1,0 +1,118 @@
+@import "../../../../variables.scss";
+
+.title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.alert {
+    color: red;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+    border-color: #ff0000 !important;
+}
+
+input.ng-invalid.ng-touched:focus,
+textarea.ng-invalid.ng-touched:focus {
+    border: 2px solid #ff0000;
+    outline: none
+}
+
+.comment-form-btn:disabled,
+.comment-form-btn:disabled:hover {
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    margin-top: 15px;
+    border-radius: 3px;
+    border-color: $secondary-color;
+    background: #6b6b6b6c;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    color: $primary-color;
+}
+
+.comment-form-box {
+    margin: auto;
+    margin-bottom: 100px;
+    width: 1200px;
+    height: 400px;
+    background-color: #F4FBF4;
+    justify-content: center;
+    align-items: center;
+    border-color: #ffffff;
+    padding: 60px 30px 30px 30px;
+}
+
+.comment-form {
+    border-radius: 8px;
+    border-color: $hover-color;
+    h1 {
+        color: $text-color;
+    }
+    label {
+        color: #1E2128;
+        text-align: left;
+        font-weight: 300;
+    }
+    input, textarea {
+        border-radius: 8px;
+        border-color: #000000;
+    }
+    input {
+        height: 50px;
+    }
+}
+
+.comment-form-btn {
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    margin-top: 15px;
+    border-radius: 3px;
+    background: $hover-color;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    color: #ffffff;
+}
+
+.comment-form-btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: $hover-color;
+    color: $hover-color;
+}
+
+#close-btn {
+    margin: 0;
+    width: 100px;
+    margin-left: 15px;
+}
+
+.btn {
+    height: 40px;
+    margin: auto;
+    margin-top: 30px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    color: $hover-color;
+    border-color: $hover-color;
+}
+
+
+.btn:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: $hover-color;
+}

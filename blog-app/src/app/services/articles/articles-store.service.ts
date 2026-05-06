@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
-import { Article } from '../types/article';
+import { Article } from '../../types/article';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +35,7 @@ export class ArticlesStoreService {
 
     effect(() => {
       const articles = this._articles();
-      try {
-        localStorage.setItem('articles', JSON.stringify(articles));
-      } catch (e) {
-        console.error('Failed to save articles to localStorage', e);
-      }
+      localStorage.setItem('articles', JSON.stringify(articles));
     });
   }
 

@@ -1,0 +1,11 @@
+<div class="comment-form-box">
+    <form [formGroup]="form" class="comments-form">
+        <h3 class="title">Напишите свой отзыв об этой статье</h3>
+        <label for="content">Расскажите, как вам?</label>
+        <textarea formControlName = "content" id="content" name="content" rows="5" required placeholder="Ваш комментарий"></textarea>
+        @if(form.controls["content"].invalid && form.controls["content"].touched){
+            <div class="alert">Комментарий не может содержать меньше 5 и больше 200 символов!</div>
+        }
+        <button [disabled]="form.invalid" class="comment-form-btn" type="button">Отправить</button>
+    </form>
+</div>

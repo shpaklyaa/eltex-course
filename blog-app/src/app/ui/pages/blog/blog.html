@@ -21,6 +21,7 @@
                 [article]="article" 
                 (delete)="deleteArticle(article.id)"
                 (edit)="openModalForm(article)"
+                (select)="onPostClick(article)"
                 [isFirst]="isFirstOnPage(article)">
                 </app-post>
             }

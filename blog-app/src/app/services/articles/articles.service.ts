@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, of, from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { Article } from '../types/article';
+import { Article } from '../../types/article';
 import { ArticlesStoreService } from './articles-store.service';
 import { ArticlesService } from './articles-service.interface';
 
@@ -10,13 +10,7 @@ function getStoredArticles(): Article[] {
   return data ? JSON.parse(data) : [];
 }
 
-function saveToStorage(articles: Article[]): void {
-  localStorage.setItem('articles', JSON.stringify(articles));
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ArticlesServiceImpl implements ArticlesService {
   constructor(private store: ArticlesStoreService) {}
 
@@ -43,7 +37,6 @@ export class ArticlesServiceImpl implements ArticlesService {
     }
 
     update(updatedArticle: Article): Observable<Article> {
-        // Проверяем, существует ли статья с таким ID
         const currentArticles = this.store._articles();
         const exists = currentArticles.some(a => a.id === updatedArticle.id);
 
