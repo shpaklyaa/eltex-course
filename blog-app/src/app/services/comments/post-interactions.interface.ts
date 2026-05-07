@@ -1,11 +1,10 @@
 import { Observable } from 'rxjs';
-import { Article } from '../../types/article';
+import { Coment } from '../../types/coment';
 
 export interface PostInteractionsService {
-  getAll(): Observable<Article[]>;
-  getById(id: string): Observable<Article | undefined>;
-  create(article: Omit<Article, 'id'>): Observable<Article>;
-  update(article: Article): Observable<Article>;
-  delete(id: string): Observable<void>;
-  getTotalCount(): Observable<number>;
+  // getCommentsForArticle(articleId: string): Observable<Coment[]>;
+  getById(id: string): Observable<Coment | undefined>;
+  create(comment: Omit<Coment, 'id' | 'articleId'>): Observable<Coment>;
+  update(comment: Coment): Observable<Coment>;
+  delete(id: string,  articleId: string): Observable<void>;
 }

@@ -14,4 +14,18 @@
         <img src="./assets/images/cross.svg" width="25px" height="25px">
     </button>
 </article>
-<app-comments-form></app-comments-form>
+<app-comments-form
+(save)="saveComment($event)">
+</app-comments-form>
+
+<div class="blogs-grid">
+    @for (comment of comments(); track comment.id) {
+        <app-comment
+        [comment]="comment">
+        </app-comment>
+    }
+
+    @empty {
+        <h4 class="posts-not-found">Нет коментариев</h4>
+    }
+</div>

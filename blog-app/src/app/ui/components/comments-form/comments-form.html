@@ -2,10 +2,14 @@
     <form [formGroup]="form" class="comments-form">
         <h3 class="title">Напишите свой отзыв об этой статье</h3>
         <label for="content">Расскажите, как вам?</label>
+        <input formControlName = "userName" type="text" id="title" name="title" required placeholder="Как вас зовут?">
+        @if(form.controls["userName"].invalid && form.controls["userName"].touched){
+            <div class="alert">Комментарий не может содержать меньше 5 и больше 200 символов!</div>
+        }
         <textarea formControlName = "content" id="content" name="content" rows="5" required placeholder="Ваш комментарий"></textarea>
         @if(form.controls["content"].invalid && form.controls["content"].touched){
             <div class="alert">Комментарий не может содержать меньше 5 и больше 200 символов!</div>
         }
-        <button [disabled]="form.invalid" class="comment-form-btn" type="button">Отправить</button>
+        <button [disabled]="form.invalid" class="comment-form-btn" type="button" (click)="onSave()">Отправить</button>
     </form>
 </div>
