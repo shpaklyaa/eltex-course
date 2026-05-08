@@ -3,4 +3,5 @@ export interface Coment {
     articleId: string;
     userName: string;
     content: string;
+    rating?: number;
 }

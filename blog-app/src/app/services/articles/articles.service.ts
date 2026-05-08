@@ -1,9 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
-import { Observable, of, from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { Article } from '../../types/article';
 import { ArticlesStoreService } from './articles-store.service';
-import { ArticlesService } from './articles-service.interface';
 
 function getStoredArticles(): Article[] {
   const data = localStorage.getItem('articles');
@@ -11,59 +9,57 @@ function getStoredArticles(): Article[] {
 }
 
 @Injectable()
-export class ArticlesServiceImpl implements ArticlesService {
+export class ArticlesServiceImpl {
+  private allArticles: Article[] = getStoredArticles();
+
   constructor(private store: ArticlesStoreService) {}
 
-    getAll(): Observable<Article[]> {
-        const articles = getStoredArticles();
-        this.store.saveArticles(articles);
-        return of(this.store.articles);
+  refreshFromStorage(): void {
+    const stored = localStorage.getItem('articles');
+    this.allArticles = stored ? JSON.parse(stored) : [];
     }
 
-    getById(id: string): Observable<Article | undefined> {
-        const articles = getStoredArticles();
-        const article = articles.find(a => a.id === id);
-        return of(article);
+  getAll(page: number = 1, limit: number = 7): Observable<{ articles: Article[]; total: number }> {
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const articles = this.allArticles.slice(start, end);
+    return of({ articles, total: this.allArticles.length });
+  }
+
+  getById(id: string): Observable<Article | undefined> {
+    const article = this.allArticles.find(a => a.id === id);
+    return of(article);
+  }
+
+  create(articleData: Omit<Article, 'id'>): Observable<Article> {
+    const newId = crypto.randomUUID();
+    const newArticle: Article = { id: newId, ...articleData };
+    this.allArticles.push(newArticle);
+    localStorage.setItem('articles', JSON.stringify(this.allArticles));
+    return of(newArticle);
+  }
+
+  update(updatedArticle: Article): Observable<Article> {
+    const index = this.allArticles.findIndex(a => a.id === updatedArticle.id);
+    if (index === -1) {
+      throw new Error(`Article with id ${updatedArticle.id} not found`);
     }
+    this.allArticles[index] = updatedArticle;
+    localStorage.setItem('articles', JSON.stringify(this.allArticles));
+    return of(updatedArticle);
+  }
 
-    create(articleData: Omit<Article, 'id'>): Observable<Article> {
-        const newId = crypto.randomUUID();
-        const newArticle: Article = {
-            id: newId,
-            ...articleData
-        };
-        this.store._articles.update(articles => [...articles, newArticle]);
-        return of(newArticle);
+  delete(id: string): Observable<void> {
+    const index = this.allArticles.findIndex(a => a.id === id);
+    if (index === -1) {
+      throw new Error(`Article with id ${id} not found`);
     }
+    this.allArticles.splice(index, 1);
+    localStorage.setItem('articles', JSON.stringify(this.allArticles));
+    return of(undefined);
+  }
 
-    update(updatedArticle: Article): Observable<Article> {
-        const currentArticles = this.store._articles();
-        const exists = currentArticles.some(a => a.id === updatedArticle.id);
-
-        if (!exists) {
-            throw new Error(`Article with id ${updatedArticle.id} not found`);
-        }
-        this.store._articles.update(articles =>
-            articles.map(a => a.id === updatedArticle.id ? updatedArticle : a)
-        );
-        return of(updatedArticle);
-    }
-
-    delete(id: string): Observable<void> {
-        const currentArticles = this.store._articles();
-        const exists = currentArticles.some(a => a.id === id);
-        if (!exists) {
-            throw new Error(`Article with id ${id} not found`);
-        }
-        this.store._articles.update(articles =>
-            articles.filter(a => a.id !== id)
-        );
-
-        return of(undefined);
-    }
-
-    getTotalCount(): Observable<number> {
-        const articles = getStoredArticles();
-        return of(articles.length);
-    }
+  getTotalCount(): Observable<number> {
+    return of(this.allArticles.length);
+  }
 }

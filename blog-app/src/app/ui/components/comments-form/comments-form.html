@@ -1,15 +1,35 @@
 <div class="comment-form-box">
-    <form [formGroup]="form" class="comments-form">
-        <h3 class="title">Напишите свой отзыв об этой статье</h3>
-        <label for="content">Расскажите, как вам?</label>
-        <input formControlName = "userName" type="text" id="title" name="title" required placeholder="Как вас зовут?">
-        @if(form.controls["userName"].invalid && form.controls["userName"].touched){
-            <div class="alert">Комментарий не может содержать меньше 5 и больше 200 символов!</div>
+  <form [formGroup]="form" class="comments-form" (ngSubmit)="onSave()">
+    <h3 class="title">Напишите свой отзыв об этой статье</h3>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Как вас зовут?</mat-label>
+      <input matInput formControlName="userName" placeholder="Введите ваше имя" required />
+      @if (form.controls['userName'].invalid && form.controls['userName'].touched) {
+        <mat-error>Имя должно быть от 2 до 10 символов</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Комментарий</mat-label>
+      <textarea matInput formControlName="content" rows="4" placeholder="Расскажите, как вам?" required></textarea>
+      @if (form.controls['content'].invalid && form.controls['content'].touched) {
+        <mat-error>Комментарий должен быть от 5 до 200 символов</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Оценка</mat-label>
+      <mat-select formControlName="rating">
+        <mat-option value="">Без оценки</mat-option>
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-option [value]="star">{{ star }} ⭐</mat-option>
         }
-        <textarea formControlName = "content" id="content" name="content" rows="5" required placeholder="Ваш комментарий"></textarea>
-        @if(form.controls["content"].invalid && form.controls["content"].touched){
-            <div class="alert">Комментарий не может содержать меньше 5 и больше 200 символов!</div>
-        }
-        <button [disabled]="form.invalid" class="comment-form-btn" type="button" (click)="onSave()">Отправить</button>
-    </form>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" class="comment-form-btn" [disabled]="form.invalid">
+      Отправить
+    </button>
+  </form>
 </div>

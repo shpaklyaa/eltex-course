@@ -16,13 +16,16 @@
 
     <div class="blogs">
         <div class="blogs-grid">
-            @for (article of paginatedArticles(); track article.id) {
+            @for (article of paginatedArticlesWithRating(); track article.id) {
+                
                 <app-post 
                 [article]="article" 
                 (delete)="deleteArticle(article.id)"
                 (edit)="openModalForm(article)"
                 (select)="onPostClick(article)"
-                [isFirst]="isFirstOnPage(article)">
+                [isFirst]="isFirstOnPage(article)"
+                [averageRating]="article.averageRating"
+                [ratingCount]="article.ratingCount">
                 </app-post>
             }
 

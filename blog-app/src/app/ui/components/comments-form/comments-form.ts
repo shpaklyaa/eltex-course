@@ -1,10 +1,14 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Coment } from '../../../types/coment';
+import { MatCard } from "@angular/material/card";
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-comments-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatInputModule, MatSelectModule, MatFormFieldModule],
   templateUrl: './comments-form.html',
   styleUrl: './comments-form.scss',
 })
@@ -15,16 +19,23 @@ export class CommentsForm {
 
   constructor(){
     this.form = new FormGroup({
-        "userName": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
-        "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)])
+        "userName": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
+        "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
+        "rating": new FormControl("", [   Validators.min(1), Validators.max(5)])
     });
   }
 
    onSave() {
     const newComment = {
           userName: this.form.value.userName!,
-          content: this.form.value.content!
+          content: this.form.value.content!,
+          rating: this.form.value.rating === null ? undefined : this.form.value.rating,
         };
     this.save.emit(newComment);
+    this.form.reset();
+  }
+
+  setRating(value: number): void {
+    this.form.patchValue({ rating: value });
   }
 }

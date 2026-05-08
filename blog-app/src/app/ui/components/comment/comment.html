@@ -1,5 +1,83 @@
-<div class="text-container-blog-article">
-        <h3 class="article-title">{{this.comment.userName}}</h3>
-        <p class="article-content">{{this.comment.content}}</p>
-        <time class="article-date">14 oct, 2026</time> 
+<div>
+  @if (!isEditing) {
+    <mat-card class="comment-card">
+      <div class="comment-header">
+        <img class="avatar" src="./assets/images/personlogo.svg" alt="Аватар">
+        <div class="comment-info">
+          <h3 class="comment-username">{{ comment.userName }}</h3>
+            @if (comment.rating != null) {
+                {{ comment.rating }}⭐
+            } @else {
+                Без оценки
+            }
+        </div>
+      </div>
+
+      <mat-card-content class="comment-content">
+        <p>{{ comment.content }}</p>
+      </mat-card-content>
+
+      <div class="comment-actions">
+        <button class="edit-btn" (click)="startEdit()">
+          <mat-icon svgIcon="edit" width="20" height="20" alt="Редактировать"></mat-icon>
+        </button>
+        <button class="delete-btn" (click)="onDelete()">
+          <mat-icon svgIcon="cross" width="25" height="25" alt="Удалить"></mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  }
+
+  @else {
+    <form [formGroup]="form" (ngSubmit)="onSave($event)" class="edit-form">
+      <mat-card class="comment-card">
+        <div class="comment-header">
+          <img class="avatar" src="./assets/images/personlogo.svg" alt="Аватар">
+          <div class="comment-info">
+            <h3 class="comment-username">Редактирование</h3>
+          </div>
+        </div>
+
+        <mat-card-content class="comment-content">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Имя</mat-label>
+            <input matInput formControlName="userName" placeholder="Как вас зовут?" required />
+            @if (form.controls['userName'].invalid && form.controls['userName'].touched) {
+              <mat-error>Имя должно быть от 2 до 20 символов</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Комментарий</mat-label>
+            <textarea matInput formControlName="content" rows="4" placeholder="Ваш комментарий" required></textarea>
+            @if (form.controls['content'].invalid && form.controls['content'].touched) {
+              <mat-error>Комментарий должен быть от 5 до 200 символов</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Оценка</mat-label>
+            <mat-select formControlName="rating">
+              <mat-option value="">Без оценки</mat-option>
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <mat-option [value]="star">{{ star }} ⭐</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+
+        <div class="comment-actions">
+          <button type="submit" class="save-btn" [disabled]="form.invalid">
+            <mat-icon svgIcon="save" width="25" height="25" alt="Сохранить"></mat-icon>
+          </button>
+          <button type="button" class="exit-btn" (click)="cancelEdit()">
+            <mat-icon svgIcon="exit" width="25" height="25" alt="Отмена"></mat-icon>
+          </button>
+          <button type="button" class="delete-btn" (click)="onDelete()">
+            <mat-icon svgIcon="cross" width="25" height="25" alt="Удалить"></mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </form>
+  }
 </div>

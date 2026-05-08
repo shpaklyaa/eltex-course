@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, DestroyRef, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { About } from "../../components/about/about";
 import { PostsHome } from '../../components/posts-home/posts-home';
 import { Skills } from '../../components/skills/skills';
@@ -27,18 +28,31 @@ import { Article } from '../../.././types/article';
 })
 export class Home implements OnInit {
 
-  protected filteredArts: Article[] = [];
+  protected latestTwoArticles = signal<Article[]>([]);
+  private isLoading = signal(true);
 
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
-    private store: ArticlesStoreService
+    private store: ArticlesStoreService,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
-    if (this.store.arts().length === 0) {
-      this.articlesService.getAll().subscribe(articles => {
-      });
-    }
+    // Обновляем данные из localStorage
+    this.articlesService.refreshFromStorage();
+
+    // Загружаем все статьи (для home)
+    this.articlesService.getAll(1, 100).subscribe({
+      next: ({ articles }) => {
+        // Сортируем по id (или по createdAt, если есть)
+        const sorted = [...articles].sort((a, b) => b.id.localeCompare(a.id));
+        this.latestTwoArticles.set(sorted.slice(0, 2));
+      },
+      error: () => {
+        console.error('Failed to load articles for home page');
+        this.latestTwoArticles.set([]);
+      }
+    });
   }
 
   get lastestTwo() {

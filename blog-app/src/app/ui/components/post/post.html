@@ -6,7 +6,8 @@
         <div class="text-container-blog-article">
             <h3 class="article-title">{{article.title || 'Пост не найден'}}</h3>
             <p class="article-content">{{article.content}}</p>
-            <time class="article-date">14 oct, 2026</time> 
+            <span class="rating">{{ ratingDisplay }}</span>
+            <time class="article-date">14 oct, 2026</time>
         </div>
     </article>
     <button class="edit-btn" (click)="onEdit()">

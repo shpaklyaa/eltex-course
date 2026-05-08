@@ -39,10 +39,10 @@ export class PostPage {
 
   article?: Article;
   comment?: Coment;
+  
 
   comments = computed(() => {
     const articleId = this.route.snapshot.paramMap.get('id') || '';
-    // const coms = this.postInteractionsService.getStoredComments;
     return this.comsStore._comments().filter(c => c.articleId === articleId);
   });
 
@@ -59,7 +59,8 @@ export class PostPage {
         id: commentData.id!,
         articleId: commentData.articleId!,
         userName: commentData.userName ?? '',
-        content: commentData.content ?? ''
+        content: commentData.content ?? '',
+        rating: commentData.rating,
       };
       this.postInteractionsService.update(fullComment).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
@@ -71,15 +72,20 @@ export class PostPage {
       const newComment = {
         articleId: articleID,
         userName: commentData.userName ?? '',
-        content: commentData.content ?? ''
+        content: commentData.content ?? '',
+        rating: commentData.rating,
       };
       this.postInteractionsService.create(newComment).pipe(
       takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
-          console.log('Комментарий добавлена:');
+          console.log('Комментарий добавлен:');
         },
       });
     }
+  }
+
+  get articleId(): string {
+    return this.route.snapshot.paramMap.get('id') || '';
   }
 
   protected deleteComment(id: string, articleId: string): void {
@@ -88,4 +94,21 @@ export class PostPage {
       console.log('Удалено:', id);
     });
   }
+
+  averageRating = computed(() => {
+    const stats = this.comsStore.getRatingForArticle(this.articleId);
+    return stats.average;
+  });
+
+  ratingCount = computed(() => {
+    const stats = this.comsStore.getRatingForArticle(this.articleId);
+    return stats.count;
+  });
+
+  getratingDisplay(): string {
+    return this.ratingCount() > 0
+      ? `⭐ ${this.averageRating()} (${this.ratingCount()})`
+      : 'Без оценок';
+  }
+
 }

@@ -30,15 +30,21 @@
     -webkit-box-orient: vertical; 
 }
 
+.comments-not-found {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.rating {
+    display: block;
+}
+
 .bg-image {
     object-fit: cover;
     width: 100%;
     height: 100%;
     margin: 0;
-}
-
-.blog-article:hover {
-    transform: scale(1.05);
 }
 
 .article-title {

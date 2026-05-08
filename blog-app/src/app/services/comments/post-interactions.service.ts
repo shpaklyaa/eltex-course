@@ -15,18 +15,8 @@ function getStoredComments(): Coment[] {
 })
 export class PostInteractionsServiceImpl implements PostInteractionsService {
   constructor(private store: PostInteractionsStoreService) {}
+  private ratings = signal<{ commentId: string; value: number }[]>([]);
 
-  // getCommentsByArticleId(articleId: string): Observable<Coment[]> {
-  //   const filteredComments = this.store._comments().filter(a => a.articleId === articleId);
-  //   return of(filteredComments);
-  // }
-  // getCommentsForArticle(articleId: string): Observable<Coment[]> {
-  //   const filtered = computed(() => 
-  //     this.store._comments().filter(c => c.articleId === articleId)
-  //   );
-  //   return toObservable(filtered);
-  // }
-  
   getById(id: string): Observable<Coment | undefined> {
     const comments = getStoredComments();
     const comment = comments.find(a => a.id === id);
