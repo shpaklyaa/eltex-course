@@ -1,0 +1,28 @@
+<article class="blog-article" id="post">
+    <div class="image-container-blog-article">
+        <img src="./assets/images/imagenotloaded.png" class="bg-image" alt="">
+    </div>
+    <div class="text-container-blog-article">
+        <h3 class="article-title">{{article?.title}}</h3>
+        <p class="article-content">{{article?.content}}</p>
+        <span class="rating">{{ getratingDisplay() }}</span>
+        <time class="article-date">14 oct, 2026</time> 
+    </div>
+</article>
+<app-comments-form
+(save)="saveComment($event)">
+</app-comments-form>
+
+<div class="blogs-grid">
+    @for (comment of comments(); track comment.id) {
+        <app-comment
+        [comment]="comment"
+        (delete)="deleteComment(comment.id, comment.articleId)"
+        (edit)="saveComment($event)">
+        </app-comment>
+    }
+
+    @empty {
+        <h4 class="comments-not-found">Нет коментариев</h4>
+    }
+</div>

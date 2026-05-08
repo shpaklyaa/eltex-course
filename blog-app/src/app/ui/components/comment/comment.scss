@@ -1,0 +1,105 @@
+.comment-card {
+  max-width: 1200px;
+  margin: 16px auto;
+  padding: 20px;
+  background-color: #e6f7ee;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .comment-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .comment-username {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .comment-rating {
+      font-size: 0.9rem;
+      color: #ffc107;
+      font-weight: 500;
+    }
+  }
+}
+
+.comment-content {
+  margin-bottom: 16px;
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+
+  button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(0,0,0,0.08);
+      transform: scale(1.1);
+    }
+
+    img {
+      display: block;
+    }
+  }
+
+  .save-btn {
+    background: #9dce9e;
+    color: white;
+    border-radius: 50%;
+  }
+
+  .exit-btn {
+    background: #ffada7;
+    color: white;
+    border-radius: 50%;
+  }
+
+  .delete-btn {
+    color: white;
+    border-radius: 50%;
+  }
+}

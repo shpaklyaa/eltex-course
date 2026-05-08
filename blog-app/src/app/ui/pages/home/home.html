@@ -1,5 +1,5 @@
 <app-about></app-about>
-@for (article of lastestTwo; track article.id) {
+@for (article of lastestTwo(); track article.id) {
     <app-posts-home
     [article]="article"
     [isFirst]="isFirst(article)">

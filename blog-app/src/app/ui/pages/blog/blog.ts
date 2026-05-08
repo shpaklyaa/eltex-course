@@ -1,14 +1,20 @@
-import { Component, ViewChild, OnInit, Inject, signal } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { AdminPanel } from '../../components/admin-panel/admin-panel';
 import { Post } from '../../components/post/post';
 import { Article } from '../../.././types/article';
 import { FormModal } from '../../components/form-modal/form-modal';
 import { StatsModal } from '../../components/stats-modal/stats-modal';
-import { ArticlesService } from '../../../services/articles-service.interface';
-import { ArticlesStoreService } from '../../../services/articles-store.service';
-import { ArticlesServiceImpl } from '../../../services/articles.service';
-import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
+import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
+import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
+import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
+import { PostInteractionsStoreService } from '../../../services/comments/post-interactions-store.service';
+import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
+import { PostInteractionsService } from '../../../services/comments/post-interactions.interface';
+import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
 
 @Component({
   selector: 'app-blog',
@@ -20,17 +26,13 @@ import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
     StatsModal
   ],
   providers: [
-    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl }
+    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl },
+    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
 })
 export class Blog implements OnInit {
-  @ViewChild(FormModal) modal!: FormModal;
-  @ViewChild(FormModal) modalBackdrop!: FormModal;
-  @ViewChild(StatsModal) modalStats!: StatsModal;
-  @ViewChild(StatsModal) modalBackdropStats!: StatsModal;
-
   protected isArticleModalOpen = signal(false);
   protected isStatsModalOpen = signal(false);
 
@@ -38,43 +40,58 @@ export class Blog implements OnInit {
 
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
-    private store: ArticlesStoreService
+    private store: ArticlesStoreService,
+    private comsStore: PostInteractionsStoreService,
+    private destroyRef: DestroyRef,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    if (this.store.articles.length === 0) {
-      this.articlesService.getAll().subscribe(articles => {
-      });
-    }
+    this.loadArticlesForPage(1);
+  }
+
+  private loadArticlesForPage(page: number): void {
+    const size = this.store.pageSize();
+    this.articlesService.getAll(page, size).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ articles, total }) => {
+      this.store.updatePageData(articles, total);
+    });
+  }
+
+  public onPostClick(article: Article): void {
+    this.router.navigate(['/blog', 'post', article.id]);
   }
 
   protected isFirstOnPage(article: Article): boolean {
-    const paginatedArticles = this.store.getPaginatedArticles();
+    const paginatedArticles = this.store.currentPageArticles();
     return paginatedArticles.length > 0 && paginatedArticles[0].id === article.id;
   }
 
   public get statsData() {
-    return { totalArticles: this.store.articles.length }
+    return { totalArticles: this.store._totalArticles() };
   }
 
-  protected get paginatedArticles() {
-    return this.store.getPaginatedArticles();
-  }
+  readonly paginatedArticles = computed(() => {
+    return this.store.currentPageArticles();
+  });
 
-  protected get currentPage() {
-    return this.store.currentPage;
+  protected get currentPage(): number {
+    return this.store.currentPage();
   }
 
   protected get pageNumbers(): number[] {
-  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
-}
+    const totPages = this.totalPages;
+    return Array.from({ length: totPages }, (_, i) => i + 1);
+  }
 
-  public get totalPages() {
-    return this.store.totalPages;
+  public get totalPages(): number {
+    return this.store.totalPages();
   }
 
   protected goToPage(page: number): void {
-    this.store.currentPage = page;
+    this.store.currenPage = page;
+    this.loadArticlesForPage(page);
   }
 
   protected saveArticle(articleData: Partial<Article>): void {
@@ -84,9 +101,12 @@ export class Blog implements OnInit {
         title: articleData.title ?? '',
         content: articleData.content ?? ''
       };
-      this.articlesService.update(fullArticle).subscribe({
+      this.articlesService.update(fullArticle).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => {
-          console.log('Обновлено');
+          console.log('Статья обновлена');
+          this.loadArticlesForPage(this.store.currentPage());
           this.closeModal();
         }
       });
@@ -95,9 +115,12 @@ export class Blog implements OnInit {
         title: articleData.title ?? '',
         content: articleData.content ?? ''
       };
-      this.articlesService.create(newArticle).subscribe({
+      this.articlesService.create(newArticle).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => {
-          console.log('Статья добавлена:');
+          console.log('Статья добавлена');
+          this.loadArticlesForPage(this.store.currentPage());
           this.closeModal();
         },
       });
@@ -105,8 +128,11 @@ export class Blog implements OnInit {
   }
 
   protected deleteArticle(id: string): void {
-    this.articlesService.delete(id).subscribe(() => {
-      console.log('Удалено:', id);
+    this.articlesService.delete(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      console.log('Статья удалена:', id);
+      this.loadArticlesForPage(this.store.currentPage());
     });
   }
 
@@ -120,7 +146,21 @@ export class Blog implements OnInit {
     this.editingArticle = article;
   }
 
-  protected openModalStats() {
+  protected openModalStats(): void {
     this.isStatsModalOpen.set(true);
   }
+
+  readonly paginatedArticlesWithRating = computed(() => {
+    const articles = this.store.currentPageArticles();
+    const ratingMap = this.comsStore.ratingStats();
+
+    return articles.map(article => {
+      const stats = ratingMap.get(article.id) || { average: 0, count: 0 };
+      return {
+        ...article,
+        averageRating: stats.average,
+        ratingCount: stats.count,
+      };
+    });
+  });
 }

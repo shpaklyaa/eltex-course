@@ -1,13 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, DestroyRef, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { About } from "../../components/about/about";
 import { PostsHome } from '../../components/posts-home/posts-home';
 import { Skills } from '../../components/skills/skills';
 import { Work } from '../../components/work/work';
 import { Hobby } from '../../components/hobby/hobby';
-import { ArticlesService } from '../../../services/articles-service.interface';
-import { ArticlesStoreService } from '../../../services/articles-store.service';
-import { ArticlesServiceImpl } from '../../../services/articles.service';
-import { ARTICLES_SERVICE } from '../../../services/articles-service.token';
+import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
+import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
+import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
 import { Article } from '../../.././types/article';
 
 @Component({
@@ -27,18 +28,31 @@ import { Article } from '../../.././types/article';
 })
 export class Home implements OnInit {
 
-  protected filteredArts: Article[] = [];
+  protected latestTwoArticles = signal<Article[]>([]);
+  private isLoading = signal(true);
 
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
-    private store: ArticlesStoreService
+    private store: ArticlesStoreService,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
-    if (this.store.articles.length === 0) {
-      this.articlesService.getAll().subscribe(articles => {
-      });
-    }
+    // Обновляем данные из localStorage
+    this.articlesService.refreshFromStorage();
+
+    // Загружаем все статьи (для home)
+    this.articlesService.getAll(1, 100).subscribe({
+      next: ({ articles }) => {
+        // Сортируем по id (или по createdAt, если есть)
+        const sorted = [...articles].sort((a, b) => b.id.localeCompare(a.id));
+        this.latestTwoArticles.set(sorted.slice(0, 2));
+      },
+      error: () => {
+        console.error('Failed to load articles for home page');
+        this.latestTwoArticles.set([]);
+      }
+    });
   }
 
   get lastestTwo() {
@@ -46,7 +60,7 @@ export class Home implements OnInit {
   }
 
   protected isFirst(article: Article): boolean {
-    const latestTwoArticles = this.store.latestTwoArticles;
+    const latestTwoArticles = this.store.latestTwoArticles();
     return latestTwoArticles[0].id === article.id;
   }
 }

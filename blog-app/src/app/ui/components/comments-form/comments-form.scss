@@ -1,0 +1,50 @@
+@import "../../../../variables.scss";
+
+.comment-form-box {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #f4fbf4;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.comments-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .comment-form-btn {
+    width: 100%;
+    height: 44px;
+    background: $hover-color;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: darken($hover-color, 10%);
+      transform: scale(1.05);
+    }
+  }
+}
