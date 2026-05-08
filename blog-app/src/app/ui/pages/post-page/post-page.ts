@@ -42,6 +42,7 @@ export class PostPage {
 
   comments = computed(() => {
     const articleId = this.route.snapshot.paramMap.get('id') || '';
+    // const coms = this.postInteractionsService.getStoredComments;
     return this.comsStore._comments().filter(c => c.articleId === articleId);
   });
 

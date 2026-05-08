@@ -22,7 +22,7 @@ export class CommentsForm {
 
    onSave() {
     const newComment = {
-          userName: this.form.value.title!,
+          userName: this.form.value.userName!,
           content: this.form.value.content!
         };
     this.save.emit(newComment);
