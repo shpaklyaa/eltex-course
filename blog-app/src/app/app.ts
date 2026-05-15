@@ -15,12 +15,10 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './app.html',
   styleUrl: './app.scss',
   providers: [
-    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl }
   ]
 })
 export class App {
   constructor(
-    @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
     private store: ArticlesStoreService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer

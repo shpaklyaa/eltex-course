@@ -1,4 +1,4 @@
-import { Component, Inject, DestroyRef, inject, computed } from '@angular/core';
+import { Component, Inject, DestroyRef, inject, computed, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { PostInteractionsStoreService } from '../../../services/comments/post-in
 import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
 import { PostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
+import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http.post-interactions.service';
 
 @Component({
   selector: 'app-post-page',
@@ -22,8 +23,8 @@ import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-inter
   templateUrl: './post-page.html',
   styleUrl: './post-page.scss',
   providers: [
-    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl },
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
+    // { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
   ],
 })
 export class PostPage {
@@ -31,13 +32,12 @@ export class PostPage {
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: PostInteractionsService,
     private route: ActivatedRoute,
-    private store: ArticlesStoreService,
     private comsStore: PostInteractionsStoreService
   ) {}
 
   private destroyRef = inject(DestroyRef);
 
-  article?: Article;
+  article = signal<Article | undefined>(undefined);
   comment?: Coment;
   
 
@@ -49,7 +49,7 @@ export class PostPage {
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('id') || '';
     this.articlesService.getById(postId).subscribe((data) => {
-      this.article = data;
+      this.article.set(data);
     })
   }
 
@@ -58,8 +58,8 @@ export class PostPage {
       const fullComment: Coment = {
         id: commentData.id!,
         articleId: commentData.articleId!,
-        userName: commentData.userName ?? '',
-        content: commentData.content ?? '',
+        userName: commentData.userName || 'Аноним',
+        content: commentData.content || 'Без текста',
         rating: commentData.rating,
       };
       this.postInteractionsService.update(fullComment).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -71,8 +71,8 @@ export class PostPage {
       const articleID = this.route.snapshot.paramMap.get('id') || '';
       const newComment = {
         articleId: articleID,
-        userName: commentData.userName ?? '',
-        content: commentData.content ?? '',
+        userName: commentData.userName || 'Аноним',
+        content: commentData.content || 'Без текста',
         rating: commentData.rating,
       };
       this.postInteractionsService.create(newComment).pipe(

@@ -20,10 +20,8 @@
                 
                 <app-post 
                 [article]="article" 
-                (delete)="deleteArticle(article.id)"
-                (edit)="openModalForm(article)"
-                (select)="onPostClick(article)"
                 [isFirst]="isFirstOnPage(article)"
+
                 [averageRating]="article.averageRating"
                 [ratingCount]="article.ratingCount">
                 </app-post>
@@ -47,7 +45,7 @@
     <div class="pagination">
         @for (page of pageNumbers; track page) {
             <button
-                [class.active]="page === currentPage"
+                [class.active]="page === currentPage()"
                 (click)="goToPage(page)">
                 {{ page }}
             </button>
