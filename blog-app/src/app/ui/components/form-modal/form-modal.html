@@ -18,6 +18,20 @@
                     <div class="alert">Текст не может содержать меньше 25 и больше 120 символов!</div>
                 }
 
+               <label for="image" class="file-upload"> Загрузить изображение
+                    <input 
+                        type="file" 
+                        accept="image/*"
+                        id="image"
+                        (change)="onFileSelected($event)"
+                        style="display: none;">
+                </label>
+
+                <!-- <div *ngIf="previewUrl() && form.value.imgSrc" class="preview">
+                    <img [src]="previewUrl()" alt="Preview">
+                    <button type="button" (click)="removeImage()">Удалить</button>
+                </div> -->
+
                 <button (click)="onSave()" [disabled]="form.invalid" class="blog-form-btn" type="button">{{ saveButtonLabel() }}</button>
                 <button (click)="onClose()"class="btn"  id="close-btn" type="button">Отмена</button>
                 <!-- <div class="loading-message">

@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef } from '@angular/core';
+import { Observable } from 'rxjs';
 import { RouterOutlet, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -26,15 +27,14 @@ import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-inter
     StatsModal
   ],
   providers: [
-    { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl },
     { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
 })
 export class Blog implements OnInit {
-  protected isArticleModalOpen = signal(false);
-  protected isStatsModalOpen = signal(false);
+  public isArticleModalOpen = signal(false);
+  public isStatsModalOpen = signal(false);
 
   editingArticle: Article | undefined = undefined;
 
@@ -48,6 +48,29 @@ export class Blog implements OnInit {
 
   ngOnInit() {
     this.loadArticlesForPage(1);
+      console.log('Initial state:', {
+    totalArticles: this.store._totalArticles(),
+    pageSize: this.store.pageSize(),
+    totalPages: this.store.totalPages()
+  });
+  }
+
+  readonly paginatedArticles = computed(() => {
+    return this.store.currentPageArticles();
+  });
+
+  readonly currentPage = computed(() => {
+    return this.store.totalPages();
+  });
+
+  public getArticleById(articleId: string): void {
+    this.articlesService.getById(articleId).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: () => {
+          console.log('получен id', articleId);
+        }
+    });
   }
 
   private loadArticlesForPage(page: number): void {
@@ -72,14 +95,6 @@ export class Blog implements OnInit {
     return { totalArticles: this.store._totalArticles() };
   }
 
-  readonly paginatedArticles = computed(() => {
-    return this.store.currentPageArticles();
-  });
-
-  protected get currentPage(): number {
-    return this.store.currentPage();
-  }
-
   protected get pageNumbers(): number[] {
     const totPages = this.totalPages;
     return Array.from({ length: totPages }, (_, i) => i + 1);
@@ -94,12 +109,13 @@ export class Blog implements OnInit {
     this.loadArticlesForPage(page);
   }
 
-  protected saveArticle(articleData: Partial<Article>): void {
+  public saveArticle(articleData: Partial<Article>): void {
     if ('id' in articleData && articleData.id != null) {
       const fullArticle: Article = {
         id: articleData.id!,
         title: articleData.title ?? '',
-        content: articleData.content ?? ''
+        content: articleData.content ?? '',
+        imgSrc: articleData.imgSrc ?? null
       };
       this.articlesService.update(fullArticle).pipe(
         takeUntilDestroyed(this.destroyRef)
@@ -113,7 +129,8 @@ export class Blog implements OnInit {
     } else {
       const newArticle = {
         title: articleData.title ?? '',
-        content: articleData.content ?? ''
+        content: articleData.content ?? '',
+        imgSrc: articleData.imgSrc ?? null
       };
       this.articlesService.create(newArticle).pipe(
         takeUntilDestroyed(this.destroyRef)
@@ -127,7 +144,7 @@ export class Blog implements OnInit {
     }
   }
 
-  protected deleteArticle(id: string): void {
+  public deleteArticle(id: string): void {
     this.articlesService.delete(id).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
@@ -136,17 +153,17 @@ export class Blog implements OnInit {
     });
   }
 
-  protected closeModal(): void {
+  public closeModal(): void {
     this.isStatsModalOpen.set(false);
     this.isArticleModalOpen.set(false);
   }
 
-  protected openModalForm(article?: Article): void {
+  public openModalForm(article?: Article): void {
     this.isArticleModalOpen.set(true);
     this.editingArticle = article;
   }
 
-  protected openModalStats(): void {
+  public openModalStats(): void {
     this.isStatsModalOpen.set(true);
   }
 

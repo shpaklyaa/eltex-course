@@ -17,6 +17,11 @@ export class PostInteractionsServiceImpl implements PostInteractionsService {
   constructor(private store: PostInteractionsStoreService) {}
   private ratings = signal<{ commentId: string; value: number }[]>([]);
 
+  getCommentsForArticle(articleId: string): Observable<Coment[]> {
+    const comments = getStoredComments();
+    return of(comments.filter(c => c.articleId === articleId));
+  }
+
   getById(id: string): Observable<Coment | undefined> {
     const comments = getStoredComments();
     const comment = comments.find(a => a.id === id);

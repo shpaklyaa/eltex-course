@@ -4,8 +4,8 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Как вас зовут?</mat-label>
-      <input matInput formControlName="userName" placeholder="Введите ваше имя" required />
-      @if (form.controls['userName'].invalid && form.controls['userName'].touched) {
+      <input matInput formControlName="username" placeholder="Введите ваше имя" required />
+      @if (form.controls['username'].invalid && form.controls['username'].touched) {
         <mat-error>Имя должно быть от 2 до 10 символов</mat-error>
       }
     </mat-form-field>

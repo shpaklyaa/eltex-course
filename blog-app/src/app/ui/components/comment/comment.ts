@@ -25,7 +25,7 @@ export class Comment {
 
   constructor(){
     this.form = new FormGroup({
-        "userName": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
+        "username": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
         "rating": new FormControl("", [   Validators.min(1), Validators.max(5)])
     });
@@ -34,7 +34,7 @@ export class Comment {
   startEdit(): void {
     this.isEditing = true;
     this.form.reset({
-      userName: this.comment.userName,
+      username: this.comment.username,
       content: this.comment.content,
       rating: this.comment.rating ?? null
     })
@@ -50,7 +50,7 @@ export class Comment {
       console.log('Оценка', this.form.value)
       const updatedComment: Coment = {
         ...this.comment,
-        userName: this.form.value.userName.trim(),
+        username: this.form.value.username.trim(),
         content: this.form.value.content.trim(),
         rating: this.form.value.rating === null || this.form.value.rating === ''
         ? undefined

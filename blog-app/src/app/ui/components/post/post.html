@@ -1,7 +1,7 @@
 <div class="blog-article">
     <article class="blog-article" id="post" [class.is-first]="isFirst" (click)="onSelect()">
         <div class="image-container-blog-article">
-            <img src="./assets/images/imagenotloaded.png" class="bg-image" alt="">
+            <img [src]="article.imgSrc || './assets/images/imagenotloaded.png'"  class="bg-image" alt="">
         </div>
         <div class="text-container-blog-article">
             <h3 class="article-title">{{article.title || 'Пост не найден'}}</h3>

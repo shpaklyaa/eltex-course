@@ -1,5 +1,6 @@
-import { Component, Input, Output, HostBinding, EventEmitter, input } from '@angular/core';
+import { Component, Input, Output, HostBinding, EventEmitter, computed } from '@angular/core';
 import { Article } from '../../../types/article';
+import { Blog } from '../../pages/blog/blog';
 
 @Component({
   selector: 'app-post',
@@ -11,16 +12,14 @@ export class Post {
   @Input() article!: Article;
   @Input() isFirst = false;
 
-  @Output() delete = new EventEmitter<string>();
-  @Output() edit = new EventEmitter<Article>();
-  @Output() select = new EventEmitter<Article>();
-
   @Input() averageRating: number = 0;
   @Input() ratingCount: number = 0;
 
   @HostBinding('attr.is-first') get isFirstChild() {
     return this.isFirst ? 'true' : null;
   }
+
+  constructor(private blog: Blog) {}
 
   ngOnInit() {
     console.log('Article:', this.article);
@@ -33,14 +32,14 @@ export class Post {
   }
 
   protected onDelete() {
-    this.delete.emit(this.article.id);
+    this.blog.deleteArticle(this.article.id);
   }
 
   protected onEdit() {
-    this.edit.emit(this.article);
+    this.blog.openModalForm(this.article);
   }
 
   protected onSelect() {
-    this.select.emit(this.article);
+    this.blog.onPostClick(this.article)
   }
 }

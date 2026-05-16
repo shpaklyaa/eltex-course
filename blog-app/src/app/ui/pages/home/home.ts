@@ -22,9 +22,6 @@ import { Article } from '../../.././types/article';
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  providers: [
-      { provide: ARTICLES_SERVICE, useClass: ArticlesServiceImpl }
-  ]
 })
 export class Home implements OnInit {
 
@@ -38,13 +35,8 @@ export class Home implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Обновляем данные из localStorage
-    this.articlesService.refreshFromStorage();
-
-    // Загружаем все статьи (для home)
     this.articlesService.getAll(1, 100).subscribe({
       next: ({ articles }) => {
-        // Сортируем по id (или по createdAt, если есть)
         const sorted = [...articles].sort((a, b) => b.id.localeCompare(a.id));
         this.latestTwoArticles.set(sorted.slice(0, 2));
       },

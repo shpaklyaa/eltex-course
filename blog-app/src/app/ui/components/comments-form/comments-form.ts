@@ -19,7 +19,7 @@ export class CommentsForm {
 
   constructor(){
     this.form = new FormGroup({
-        "userName": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
+        "username": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
         "rating": new FormControl("", [   Validators.min(1), Validators.max(5)])
     });
@@ -27,7 +27,7 @@ export class CommentsForm {
 
    onSave() {
     const newComment = {
-          userName: this.form.value.userName!,
+          username: this.form.value.username!,
           content: this.form.value.content!,
           rating: this.form.value.rating === null ? undefined : this.form.value.rating,
         };

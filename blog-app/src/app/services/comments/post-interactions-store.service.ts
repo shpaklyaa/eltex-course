@@ -18,10 +18,10 @@ export class PostInteractionsStoreService {
     });
   }
 
-  saveComments(comments: Coment[]): void {
-    const currentComments = this._comments();
-    this._comments.set([...currentComments])
+  updateComments(comments: Coment[]): void {
+    this._comments.set(comments);
   }
+
   
   readonly ratingStats = computed(() => {
     const comments = this._comments();

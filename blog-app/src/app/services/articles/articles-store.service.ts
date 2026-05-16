@@ -5,12 +5,13 @@ import { Article } from '../../types/article';
   providedIn: 'root'
 })
 export class ArticlesStoreService {
+
+  public arts = signal<Article| null>(null);
   private _currentPage = signal<number>(1);
   private _pageSize = signal<number>(7);
   public _totalArticles = signal<number>(0);
   private _currentPageArticles = signal<Article[]>([]);
 
-  // Вычисляемые свойства
   readonly currentPage = computed(() => this._currentPage());
   readonly pageSize = computed(() => this._pageSize());
   readonly totalPages = computed(() => Math.ceil(this._totalArticles() / this._pageSize()));
