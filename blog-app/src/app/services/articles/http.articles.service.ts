@@ -81,6 +81,7 @@ export class HttpArticleServiceImpl {
         map(newArticle => {
             this.allArticles.update(articles => [...articles, newArticle]);
             this.store.updatePageData(this.allArticles(), this.allArticles().length);
+            console.log('Sending article data to backend:', articleData);
             return newArticle;
         }),
         catchError(err => {

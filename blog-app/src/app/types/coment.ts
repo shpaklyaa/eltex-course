@@ -1,7 +1,7 @@
 export interface Coment {
     id: string;
-    articleId: string;
-    userName: string;
+    username: string;
     content: string;
+    articleId: string;
     rating?: number;
 }

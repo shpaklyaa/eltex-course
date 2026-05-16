@@ -18,8 +18,8 @@ export const appConfig: ApplicationConfig = {
 
     { 
       provide: ARTICLES_SERVICE, 
-      useClass: HttpArticleServiceImpl
-      // useClass: ArticlesServiceImpl
+      // useClass: HttpArticleServiceImpl
+      useClass: ArticlesServiceImpl     //Не получилось сделать, как на лекции(
       // useClass: environment.useLcService ? ArticlesServiceImpl : HttpArticleServiceImpl
     }
   ]

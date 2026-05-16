@@ -95,10 +95,6 @@ export class Blog implements OnInit {
     return { totalArticles: this.store._totalArticles() };
   }
 
-  // protected get currentPag(): number {
-  //   return this.store.currentPage();
-  // }
-
   protected get pageNumbers(): number[] {
     const totPages = this.totalPages;
     return Array.from({ length: totPages }, (_, i) => i + 1);
@@ -118,7 +114,8 @@ export class Blog implements OnInit {
       const fullArticle: Article = {
         id: articleData.id!,
         title: articleData.title ?? '',
-        content: articleData.content ?? ''
+        content: articleData.content ?? '',
+        imgSrc: articleData.imgSrc ?? null
       };
       this.articlesService.update(fullArticle).pipe(
         takeUntilDestroyed(this.destroyRef)
@@ -132,7 +129,8 @@ export class Blog implements OnInit {
     } else {
       const newArticle = {
         title: articleData.title ?? '',
-        content: articleData.content ?? ''
+        content: articleData.content ?? '',
+        imgSrc: articleData.imgSrc ?? null
       };
       this.articlesService.create(newArticle).pipe(
         takeUntilDestroyed(this.destroyRef)

@@ -2,9 +2,9 @@ export interface Article {
   id: string;
   title: string;
   content: string;
+  imgSrc?: string | null;
   averageRating?: number;
   ratingCount?: number;
-  imgSrc?: string | null;
   categoryId?: string | null;
   rating?: number;
   createdAt?: string;

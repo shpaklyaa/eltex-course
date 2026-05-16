@@ -27,9 +27,18 @@ export class HttpPostInteractionsServiceImpl {
     private allComments = signal<Coment[]>([]);
     private ratings = signal<{ commentId: string; value: number }[]>([]);
 
-    getById(articleId: string): Observable<Coment[]> {
-        return this.httpClient.get<Coment[]>(`http://localhost:3000/comments/article/${articleId}`, {
-        params: { articleId }
+    getCommentsForArticle(articleId: string): Observable<Coment[]> {
+        return this.httpClient.get<Coment[]>(`http://localhost:3000/comments/article/${articleId}`).pipe(
+        catchError(err => {
+        console.error('GET /comments/article/:id ERROR', err);
+        return of([]);
+        }),
+        takeUntilDestroyed(this.destroyRef));
+    }
+
+    getById(id: string): Observable<Coment[]> {
+        return this.httpClient.get<Coment[]>(`http://localhost:3000/comments/article/${id}`, {
+        params: { id }
         }).pipe(
         catchError(err => {
             console.error('GET /comments by articleId ERROR', err);
@@ -53,44 +62,44 @@ export class HttpPostInteractionsServiceImpl {
             takeUntilDestroyed(this.destroyRef));
     }
 
-    update(updatedComment: Coment): Observable<Coment> {
-        return this.httpClient.patch<Coment>(`http://localhost:3000/comments/${updatedComment.id}`, updatedComment).pipe(
-        map(() => {
-            this.allComments.update(comments => {
-            const index = comments.findIndex(a => a.id === updatedComment.id);
-            if (index === -1) {
-                throw new Error(`Article with id ${updatedComment.id} not found`);
-            }
-            const updatedComments = [...comments];
-            updatedComments[index] = updatedComment;
-            return updatedComments;
-            });
-            return updatedComment;
-        }),
-        catchError(err => {
-                console.error('PUT /comments/:id ERROR', { id: updatedComment.id, error: err.message });
-                throw err;
-            }),
-        takeUntilDestroyed(this.destroyRef));
-    }
+    // update(updatedComment: Coment): Observable<Coment> {
+    //     return this.httpClient.patch<Coment>(`http://localhost:3000/comments/${updatedComment.id}`, updatedComment).pipe(
+    //     map(() => {
+    //         this.allComments.update(comments => {
+    //         const index = comments.findIndex(a => a.id === updatedComment.id);
+    //         if (index === -1) {
+    //             throw new Error(`Article with id ${updatedComment.id} not found`);
+    //         }
+    //         const updatedComments = [...comments];
+    //         updatedComments[index] = updatedComment;
+    //         return updatedComments;
+    //         });
+    //         return updatedComment;
+    //     }),
+    //     catchError(err => {
+    //             console.error('PUT /comments/:id ERROR', { id: updatedComment.id, error: err.message });
+    //             throw err;
+    //         }),
+    //     takeUntilDestroyed(this.destroyRef));
+    // }
   
-    delete(id: string, articleId: string): Observable<void> {
-        return this.httpClient.delete<void>(`http://localhost:3000/comments/${id}`).pipe(
-        map(() => {
-            this.allComments.update(comments => {
-                const index = comments.findIndex(a => a.id === id);
-                if (index === -1) {
-                    throw new Error(`Article with id ${id} not found`);
-                }
-                const updatedComments = [...comments];
-                updatedComments.splice(index, 1);
-                return updatedComments;
-            });
-        }),
-        catchError(err => {
-            console.error('DELETE /comments/:id ERROR', { id, error: err.message });
-            throw err;
-        }),
-        takeUntilDestroyed(this.destroyRef));
-    }
+    // delete(id: string, articleId: string): Observable<void> {
+    //     return this.httpClient.delete<void>(`http://localhost:3000/comments/${id}`).pipe(
+    //     map(() => {
+    //         this.allComments.update(comments => {
+    //             const index = comments.findIndex(a => a.id === id);
+    //             if (index === -1) {
+    //                 throw new Error(`Article with id ${id} not found`);
+    //             }
+    //             const updatedComments = [...comments];
+    //             updatedComments.splice(index, 1);
+    //             return updatedComments;
+    //         });
+    //     }),
+    //     catchError(err => {
+    //         console.error('DELETE /comments/:id ERROR', { id, error: err.message });
+    //         throw err;
+    //     }),
+    //     takeUntilDestroyed(this.destroyRef));
+    // }
 }

@@ -4,7 +4,7 @@
       <div class="comment-header">
         <img class="avatar" src="./assets/images/personlogo.svg" alt="Аватар">
         <div class="comment-info">
-          <h3 class="comment-username">{{ comment.userName }}</h3>
+          <h3 class="comment-username">{{ comment.username }}</h3>
             @if (comment.rating != null) {
                 {{ comment.rating }}⭐
             } @else {
@@ -41,8 +41,8 @@
         <mat-card-content class="comment-content">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Имя</mat-label>
-            <input matInput formControlName="userName" placeholder="Как вас зовут?" required />
-            @if (form.controls['userName'].invalid && form.controls['userName'].touched) {
+            <input matInput formControlName="username" placeholder="Как вас зовут?" required />
+            @if (form.controls['username'].invalid && form.controls['username'].touched) {
               <mat-error>Имя должно быть от 2 до 20 символов</mat-error>
             }
           </mat-form-field>

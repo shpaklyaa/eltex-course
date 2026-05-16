@@ -1,4 +1,4 @@
-import { Component, Inject, DestroyRef, inject, computed, signal } from '@angular/core';
+import { Component, Inject, DestroyRef, inject, computed, signal, effect } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -23,34 +23,45 @@ import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http
   templateUrl: './post-page.html',
   styleUrl: './post-page.scss',
   providers: [
-    { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    // { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
+    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
   ],
 })
 export class PostPage {
+  private destroyRef = inject(DestroyRef);
+  private commentsSignal = signal<Coment[]>([]);
+
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: PostInteractionsService,
     private route: ActivatedRoute,
     private comsStore: PostInteractionsStoreService
-  ) {}
+  ) {
 
-  private destroyRef = inject(DestroyRef);
+    }
 
   article = signal<Article | undefined>(undefined);
-  comment?: Coment;
   
-
-  comments = computed(() => {
-    const articleId = this.route.snapshot.paramMap.get('id') || '';
-    return this.comsStore._comments().filter(c => c.articleId === articleId);
-  });
-
+  comments = this.commentsSignal;
+  
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('id') || '';
-    this.articlesService.getById(postId).subscribe((data) => {
-      this.article.set(data);
-    })
+
+    this.articlesService.getById(postId).subscribe({
+      next: (data) => {
+        this.article.set(data);
+      }
+    });
+
+    this.postInteractionsService.getCommentsForArticle(postId).subscribe({
+      next: (comments: Coment[]) => {
+        this.comsStore.updateComments(comments);
+        this.commentsSignal.set(comments.filter(c => c.articleId === postId));
+      },
+      error: (err) => {
+        console.error('Failed to load comments', err);
+      }
+    });
   }
 
   protected saveComment(commentData: Partial<Coment>): void {
@@ -58,7 +69,7 @@ export class PostPage {
       const fullComment: Coment = {
         id: commentData.id!,
         articleId: commentData.articleId!,
-        userName: commentData.userName || 'Аноним',
+        username: commentData.username || 'Аноним',
         content: commentData.content || 'Без текста',
         rating: commentData.rating,
       };
@@ -71,14 +82,15 @@ export class PostPage {
       const articleID = this.route.snapshot.paramMap.get('id') || '';
       const newComment = {
         articleId: articleID,
-        userName: commentData.userName || 'Аноним',
+        username: commentData.username || 'Аноним',
         content: commentData.content || 'Без текста',
         rating: commentData.rating,
       };
       this.postInteractionsService.create(newComment).pipe(
       takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: () => {
-          console.log('Комментарий добавлен:');
+        next: (created) => {
+          console.log('Комментарий добавлен:', created);
+          this.commentsSignal.update(comments => [...comments, created]);
         },
       });
     }
