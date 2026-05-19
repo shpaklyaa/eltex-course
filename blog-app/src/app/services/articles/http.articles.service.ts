@@ -10,9 +10,12 @@ import { catchError, map } from 'rxjs/operators';
 import { ENV_CONFIG } from '../../tokens/env.token';
 import { AppEnvironment} from '../../../environments/environment.interface'
 import { ArtsResponse } from '../../types/artsResponse';
+import { IArticlesService } from './articles-service.interface';
+import { ArticleMapperService } from '../mappers/article-mapper';
+import { BackendResponse } from '../mappers/article-mapper';
 
 @Injectable()
-export class HttpArticleServiceImpl {
+export class HttpArticleServiceImpl implements IArticlesService {
     private httpClient = inject(HttpClient);
     private destroyRef = inject(DestroyRef);
 
@@ -21,6 +24,7 @@ export class HttpArticleServiceImpl {
     readonly totalCount = computed(() => this.allArticles().length);
     constructor( 
         private store: ArticlesStoreService,
+        private articleMapper: ArticleMapperService,
         @Inject(ENV_CONFIG) private env: AppEnvironment
     ) 
     {
@@ -28,7 +32,7 @@ export class HttpArticleServiceImpl {
     }
 
     getHello(): void {
-        this.httpClient.get('http://localhost:3000/', {responseType: 'text', params: { accept: "accept" }})
+        this.httpClient.get('/api/', {responseType: 'text', params: { accept: "accept" }})
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((textResult) => 
             console.log('Response from backend:', textResult));
@@ -37,22 +41,14 @@ export class HttpArticleServiceImpl {
     getAll(page: number = 1, limit: number = 7): Observable<ArtsResponse<Article>> {
         const params = { page: page.toString(), limit: limit.toString() };
 
-        return this.httpClient.get<any>('http://localhost:3000/articles', { params }).pipe(
+        return this.httpClient.get<BackendResponse>('/api/articles', { params }).pipe(
             map(response => {
-                const articles: Article[] = Array.isArray(response?.items)
-                    ? response.items
-                    : [];
 
-                const total: number = typeof response?.total === 'number'
-                    ? response.total
-                    : articles.length;
+                const mappedResponse = this.articleMapper.mapToArticles(response);
+                this.allArticles.set(mappedResponse.articles);
+                this.store.updatePageData(mappedResponse.articles, mappedResponse.total);
 
-                this.allArticles.set(articles);
-                this.store.updatePageData(articles, total);
-                return {
-                    articles,
-                    total
-                };
+                return mappedResponse;
             }),
             catchError(err => {
                 console.error('GET /articles ERR', err);
@@ -68,7 +64,7 @@ export class HttpArticleServiceImpl {
 
     getById(id: string): Observable<Article | undefined> {
         console.log('[HTTP] GET /articles/:id with ID:', id);
-        return this.httpClient.get<Article>(`http://localhost:3000/articles/${id}`).pipe(
+        return this.httpClient.get<Article>(`/api/articles/${id}`).pipe(
             catchError(err => {
                 console.warn('GET /articles/:id NOT FOUND', err);
                 return of(undefined);
@@ -77,13 +73,14 @@ export class HttpArticleServiceImpl {
     }
 
     create(articleData: Omit<Article, 'id'>): Observable<Article> {
-        return this.httpClient.post<Article>('http://localhost:3000/articles', articleData).pipe(
-        map(newArticle => {
-            this.allArticles.update(articles => [...articles, newArticle]);
-            this.store.updatePageData(this.allArticles(), this.allArticles().length);
-            console.log('Sending article data to backend:', articleData);
-            return newArticle;
-        }),
+        const formData = new FormData();
+        formData.append('title', articleData.title);
+        formData.append('content', articleData.content);
+        if (articleData.image) {
+            formData.append('image', articleData.image);
+        }
+
+        return this.httpClient.post<Article>('/api/articles', formData).pipe(
         catchError(err => {
             console.error('POST /articles ERROR', err);
             throw err;
@@ -92,50 +89,32 @@ export class HttpArticleServiceImpl {
     }
 
     update(updatedArticle: Article): Observable<Article> {
-        return this.httpClient.patch<Article>(`http://localhost:3000/articles/${updatedArticle.id}`, updatedArticle).pipe(
-        map(() => {
-            this.allArticles.update(articles => {
-            const index = articles.findIndex(a => a.id === updatedArticle.id);
-            if (index === -1) {
-                throw new Error(`Article with id ${updatedArticle.id} not found`);
-            }
-            const updatedArticles = [...articles];
-            updatedArticles[index] = updatedArticle;
-            return updatedArticles;
-            });
-            this.store.updatePageData(this.allArticles(), this.allArticles().length);
-            return updatedArticle;
-        }),
+        const formData = new FormData();
+        formData.append('title', updatedArticle.title);
+        formData.append('content', updatedArticle.content);
+        if (updatedArticle.image) {
+            formData.append('image', updatedArticle.image);
+        }
+
+        return this.httpClient.patch<Article>(`/api/articles/${updatedArticle.id}`, formData).pipe(
         catchError(err => {
-                console.error('PUT /articles/:id ERROR', { id: updatedArticle.id, error: err.message });
-                throw err;
-            }),
+            console.error('PATCH /articles ERROR', err);
+            throw err;
+        }),
         takeUntilDestroyed(this.destroyRef));
     }
 
     delete(id: string): Observable<void> {
-        return this.httpClient.delete<void>(`http://localhost:3000/articles/${id}`).pipe(
-            map(() => {
-                this.allArticles.update(articles => {
-                const index = articles.findIndex(a => a.id === id);
-                if (index === -1) {
-                    throw new Error(`Article with id ${id} not found`);
-                }
-                const updatedArticles = [...articles];
-                updatedArticles.splice(index, 1);
-                return updatedArticles;
-                });
-                this.store.updatePageData(this.allArticles(), this.allArticles().length);
-            }),
-            catchError(err => {
-                console.error('DELETE /articles/:id ERROR', { id, error: err.message });
-                throw err;
-            }),
+        return this.httpClient.delete<void>(`/api/articles/${id}`).pipe(
+        catchError(err => {
+            console.error('DELETE /articles ERROR', err);
+            throw err;
+        }),
         takeUntilDestroyed(this.destroyRef));
     } 
 
     getTotalCount(): Observable<number> {
-        return this.httpClient.get<Article[]>('http://localhost:3000/articles').pipe(
+        return this.httpClient.get<Article[]>('/api/articles').pipe(
         map(articles => {
             this.allArticles.set(articles);
             return articles.length;

@@ -2,7 +2,7 @@ import { Injectable, signal, computed, effect } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Observable, of, from } from 'rxjs';
 import { Coment } from '../../types/coment';
-import { PostInteractionsService } from './post-interactions.interface';
+import { IPostInteractionsService } from './post-interactions.interface';
 import { PostInteractionsStoreService } from './post-interactions-store.service';
 
 function getStoredComments(): Coment[] {
@@ -13,7 +13,7 @@ function getStoredComments(): Coment[] {
 @Injectable({
   providedIn: 'root',
 })
-export class PostInteractionsServiceImpl implements PostInteractionsService {
+export class PostInteractionsServiceImpl implements IPostInteractionsService {
   constructor(private store: PostInteractionsStoreService) {}
   private ratings = signal<{ commentId: string; value: number }[]>([]);
 
@@ -22,10 +22,10 @@ export class PostInteractionsServiceImpl implements PostInteractionsService {
     return of(comments.filter(c => c.articleId === articleId));
   }
 
-  getById(id: string): Observable<Coment | undefined> {
+  getById(id: string): Observable<Coment[] | undefined> {
     const comments = getStoredComments();
     const comment = comments.find(a => a.id === id);
-    return of(comment);
+    return of(comment ? [comment] : undefined);
   }
   
   create(commentData: Omit<Coment, 'id'>): Observable<Coment> {

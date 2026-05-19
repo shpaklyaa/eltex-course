@@ -2,7 +2,7 @@ import { Component, signal, Inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from "./ui/components/header/header";
 import { Footer } from "./ui/components/footer/footer";
-import { ArticlesService } from './services/articles/articles-service.interface';
+import { IArticlesService } from './services/articles/articles-service.interface';
 import { ArticlesStoreService } from './services/articles/articles-store.service';
 import { ArticlesServiceImpl } from './services/articles/articles.service';
 import { ARTICLES_SERVICE } from './services/articles/articles-service.token';

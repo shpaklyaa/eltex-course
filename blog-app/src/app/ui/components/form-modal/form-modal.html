@@ -19,12 +19,7 @@
                 }
 
                <label for="image" class="file-upload"> Загрузить изображение
-                    <input 
-                        type="file" 
-                        accept="image/*"
-                        id="image"
-                        (change)="onFileSelected($event)"
-                        style="display: none;">
+                    <input type="file" (change)="onFileSelected($event)">
                 </label>
 
                 <!-- <div *ngIf="previewUrl() && form.value.imgSrc" class="preview">

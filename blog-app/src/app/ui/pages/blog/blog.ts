@@ -8,13 +8,13 @@ import { Post } from '../../components/post/post';
 import { Article } from '../../.././types/article';
 import { FormModal } from '../../components/form-modal/form-modal';
 import { StatsModal } from '../../components/stats-modal/stats-modal';
-import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { IArticlesService } from '../../../services/articles/articles-service.interface';
 import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
 import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
 import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
 import { PostInteractionsStoreService } from '../../../services/comments/post-interactions-store.service';
 import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
-import { PostInteractionsService } from '../../../services/comments/post-interactions.interface';
+import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
 
 @Component({
@@ -39,7 +39,7 @@ export class Blog implements OnInit {
   editingArticle: Article | undefined = undefined;
 
   constructor(
-    @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
+    @Inject(ARTICLES_SERVICE) private articlesService: IArticlesService,
     private store: ArticlesStoreService,
     private comsStore: PostInteractionsStoreService,
     private destroyRef: DestroyRef,
@@ -115,13 +115,13 @@ export class Blog implements OnInit {
         id: articleData.id!,
         title: articleData.title ?? '',
         content: articleData.content ?? '',
-        imgSrc: articleData.imgSrc ?? null
+        image: articleData.image,
       };
       this.articlesService.update(fullArticle).pipe(
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: () => {
-          console.log('Статья обновлена');
+          console.log('Статья обновлена', fullArticle);
           this.loadArticlesForPage(this.store.currentPage());
           this.closeModal();
         }
@@ -130,13 +130,13 @@ export class Blog implements OnInit {
       const newArticle = {
         title: articleData.title ?? '',
         content: articleData.content ?? '',
-        imgSrc: articleData.imgSrc ?? null
+        image: articleData.image,
       };
       this.articlesService.create(newArticle).pipe(
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: () => {
-          console.log('Статья добавлена');
+          console.log('Статья добавлена', newArticle);
           this.loadArticlesForPage(this.store.currentPage());
           this.closeModal();
         },

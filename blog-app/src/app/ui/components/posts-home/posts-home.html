@@ -6,7 +6,7 @@
             <p>{{article.content}}</p>
         </div>
         <div class="image-container-post">
-            <img src="./assets/images/imagenotloaded.png" alt="" class="bg-img">
+            <img [src]="article.imgSrc || './assets/images/imagenotloaded.png'" alt="" class="bg-img">
         </div>
     </article>
     <!-- <button class="post-btn">Browse all posts</button>
