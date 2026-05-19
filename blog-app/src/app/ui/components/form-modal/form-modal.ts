@@ -79,6 +79,9 @@ export class FormModal {
           content: data.content!,
           image: data.image,
         };
+        console.log('Before save:', this.form.value);
+        console.log('Direct imgSrc:', this.form.get('imgSrc')?.value);
+        console.log('Form value:', this.form.value);
         this.save.emit(newArticle);
       }
       this.close.emit();
