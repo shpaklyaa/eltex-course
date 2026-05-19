@@ -1,4 +1,4 @@
 import { InjectionToken } from '@angular/core';
-import { ArticlesService } from './articles-service.interface';
+import { IArticlesService } from './articles-service.interface';
 
-export const ARTICLES_SERVICE = new InjectionToken<ArticlesService>('ArticlesService');
+export const ARTICLES_SERVICE = new InjectionToken<IArticlesService>('IArticlesService');

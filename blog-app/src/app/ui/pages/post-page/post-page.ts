@@ -2,7 +2,7 @@ import { Component, Inject, DestroyRef, inject, computed, signal, effect } from 
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { IArticlesService } from '../../../services/articles/articles-service.interface';
 import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
 import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
 import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
@@ -12,7 +12,7 @@ import { Comment } from '../../components/comment/comment';
 import { CommentsForm } from '../../components/comments-form/comments-form';
 import { PostInteractionsStoreService } from '../../../services/comments/post-interactions-store.service';
 import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
-import { PostInteractionsService } from '../../../services/comments/post-interactions.interface';
+import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
 import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http.post-interactions.service';
 
@@ -32,8 +32,8 @@ export class PostPage {
   private commentsSignal = signal<Coment[]>([]);
 
   constructor(
-    @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
-    @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: PostInteractionsService,
+    @Inject(ARTICLES_SERVICE) private articlesService: IArticlesService,
+    @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: IPostInteractionsService,
     private route: ActivatedRoute,
     private comsStore: PostInteractionsStoreService
   ) {

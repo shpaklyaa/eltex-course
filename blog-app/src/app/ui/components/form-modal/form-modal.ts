@@ -23,7 +23,7 @@ export class FormModal {
     this.form = new FormGroup({
         "title": new FormControl("", [Validators.required,  Validators.minLength(25), Validators.maxLength(30)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(25), Validators.maxLength(120)]),
-        "imgSrc": new FormControl(null)
+        "image": new FormControl()
       });
 
     this.editDataEffect();
@@ -46,76 +46,38 @@ export class FormModal {
 
       if (editData) {
         this.form.reset(
-          { title: editData.title, content: editData.content, imgSrc: editData.imgSrc || null });
+          { title: editData.title, content: editData.content, image: editData.image || null });
       } else {
-        this.form.reset({imgSrc: null});
+        this.form.reset({image: null});
       }
     });
   }
 
   onFileSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      
-      const maxWidth = 500;
-      const maxHeight = 500;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > height) {
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
-        }
-      } else {
-        if (height > maxHeight) {
-          width = Math.round((width * maxHeight) / height);
-          height = maxHeight;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-      this.form.patchValue({ imgSrc: dataUrl });
-      this.previewUrl.set(dataUrl);
-    };
-    img.src = e.target?.result as string;
-  };
-  reader.readAsDataURL(file);
-}
-
-  removeImage(): void {
-    this.form.patchValue({ imgSrc: null });
-    this.previewUrl.set(null);
+    const file = (event.target as HTMLInputElement).files?.[0];
+    this.form.patchValue({
+      image: file ?? null
+    });
   }
 
   onSave(): void {
     if (this.form.valid) {
+      const data = this.form.getRawValue();
       const art = this.article();
+
       if (art) {
         const updatedArticle: Article = {
           id: art.id,
-          title: this.form.value.title!,
-          content: this.form.value.content!,
-          imgSrc: this.form.value.imgSrc || null
+          title: data.title!,
+          content: data.content!,
+          image: data.image,
         };
         this.save.emit(updatedArticle);
       } else {
         const newArticle = {
-          title: this.form.value.title!,
-          content: this.form.value.content!,
-          imgSrc: this.form.value.imgSrc || null
+          title: data.title!,
+          content: data.content!,
+          image: data.image,
         };
         console.log('Before save:', this.form.value);
         console.log('Direct imgSrc:', this.form.get('imgSrc')?.value);

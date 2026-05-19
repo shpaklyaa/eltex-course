@@ -1,4 +1,4 @@
 export const environment = {
     isDev: false,
-    useLcService: false
+    useLcService: true
 };

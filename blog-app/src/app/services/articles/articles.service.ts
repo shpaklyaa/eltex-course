@@ -2,9 +2,10 @@ import { Injectable, signal, effect, computed} from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Article } from '../../types/article';
 import { ArticlesStoreService } from './articles-store.service';
+import { IArticlesService } from './articles-service.interface';
 
 @Injectable()
-export class ArticlesServiceImpl {
+export class ArticlesServiceImpl implements IArticlesService {
   private allArticles = signal<Article[]>([]);
 
   readonly _allArticles = computed(() => this.allArticles());

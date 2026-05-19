@@ -5,7 +5,7 @@ import { PostsHome } from '../../components/posts-home/posts-home';
 import { Skills } from '../../components/skills/skills';
 import { Work } from '../../components/work/work';
 import { Hobby } from '../../components/hobby/hobby';
-import { ArticlesService } from '../../../services/articles/articles-service.interface';
+import { IArticlesService } from '../../../services/articles/articles-service.interface';
 import { ArticlesStoreService } from '../../../services/articles/articles-store.service';
 import { ArticlesServiceImpl } from '../../../services/articles/articles.service';
 import { ARTICLES_SERVICE } from '../../../services/articles/articles-service.token';
@@ -29,7 +29,7 @@ export class Home implements OnInit {
   private isLoading = signal(true);
 
   constructor(
-    @Inject(ARTICLES_SERVICE) private articlesService: ArticlesService,
+    @Inject(ARTICLES_SERVICE) private articlesService: IArticlesService,
     private store: ArticlesStoreService,
     private destroyRef: DestroyRef
   ) {}
