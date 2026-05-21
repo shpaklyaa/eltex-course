@@ -15,6 +15,7 @@ import { PostInteractionsServiceImpl } from '../../../services/comments/post-int
 import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
 import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http.post-interactions.service';
+import { GqlService } from '../../../services/comments/graphql.service'
 
 @Component({
   selector: 'app-post-page',
@@ -24,7 +25,8 @@ import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http
   styleUrl: './post-page.scss',
   providers: [
     // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    // { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService }
   ],
 })
 export class PostPage {
