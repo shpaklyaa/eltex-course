@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
 export const GET_COMMENTS = gql`
-query CommentsByArticle {
-    commentsByArticle(articleId: null) {
+query CommentsByArticle($articleId: ID!) {
+    commentsByArticle(articleId: $articleId) {
         articleId
         avgRating
         content

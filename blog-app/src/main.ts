@@ -18,18 +18,7 @@ bootstrapApplication(App, {
 
       return {
         link: httpLink.create({
-          uri: '<%= endpoint %>',
-        }),
-        cache: new InMemoryCache(),
-      };
-    }),
-    provideHttpClient(),
-    provideApollo(() => {
-      const httpLink = inject(HttpLink);
-
-      return {
-        link: httpLink.create({
-          uri: '<%= endpoint %>',
+          uri: '/graphql',
         }),
         cache: new InMemoryCache(),
       };

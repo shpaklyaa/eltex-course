@@ -24,17 +24,6 @@ export const appConfig: ApplicationConfig = {
       provide: ARTICLES_SERVICE, 
       useClass: environment.useLcService ? ArticlesServiceImpl : HttpArticleServiceImpl
     },
-    provideHttpClient(), 
-    provideApollo(() => {
-      const httpLink = inject(HttpLink);
-      console.log('хтпп', httpLink);
 
-      return {
-        link: httpLink.create({
-          uri: '/graphql',
-        }),
-        cache: new InMemoryCache(),
-      };
-    }),
   ]
 };
