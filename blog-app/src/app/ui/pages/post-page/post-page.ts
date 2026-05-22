@@ -1,4 +1,5 @@
 import { Component, Inject, DestroyRef, inject, computed, signal, effect } from '@angular/core';
+import { filter } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +16,8 @@ import { PostInteractionsServiceImpl } from '../../../services/comments/post-int
 import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
 import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http.post-interactions.service';
+import { GqlService } from '../../../services/comments/graphql.service'
+import { WebSocketIoService } from '../../../services/websocket/websocket.io.service';
 
 @Component({
   selector: 'app-post-page',
@@ -24,18 +27,22 @@ import { HttpPostInteractionsServiceImpl } from '../../../services/comments/http
   styleUrl: './post-page.scss',
   providers: [
     // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl },
+    // { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
+    WebSocketIoService
   ],
 })
 export class PostPage {
   private destroyRef = inject(DestroyRef);
   private commentsSignal = signal<Coment[]>([]);
+  private isLocalCreate = false;
 
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: IArticlesService,
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: IPostInteractionsService,
     private route: ActivatedRoute,
-    private comsStore: PostInteractionsStoreService
+    private comsStore: PostInteractionsStoreService,
+    private ws: WebSocketIoService 
   ) {
 
     }
@@ -62,7 +69,25 @@ export class PostPage {
         console.error('Failed to load comments', err);
       }
     });
+
+    this.ws.subscribeToArticle(postId);
+
+    this.commentsSignal.set([]);
+
+    this.ws.getCommentCreated()
+      .pipe(
+        filter(data => data && data.articleId === postId),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(data => {
+        if (this.isLocalCreate) return;
+        if (!this.commentsSignal().some(c => c.id === data.id)) {
+          this.commentsSignal.update(comments => [...comments, data]);
+        }
+      });
   }
+
+
 
   protected saveComment(commentData: Partial<Coment>): void {
     if ('id' in commentData && commentData.id != null) {
@@ -86,11 +111,14 @@ export class PostPage {
         content: commentData.content || 'Без текста',
         rating: commentData.rating,
       };
+      this.isLocalCreate = true;
       this.postInteractionsService.create(newComment).pipe(
       takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (created) => {
-          console.log('Комментарий добавлен:', created);
-          this.commentsSignal.update(comments => [...comments, created]);
+          if (!this.commentsSignal().some(c => c.id === created.id)) {
+            this.commentsSignal.update(comments => [...comments, created]);
+            console.log('Комментарий добавлен:', created);
+          }
         },
       });
     }
@@ -120,7 +148,7 @@ export class PostPage {
   getratingDisplay(): string {
     return this.ratingCount() > 0
       ? `⭐ ${this.averageRating()} (${this.ratingCount()})`
-      : 'Без оценок';
+      : '0⭐';
   }
 
 }

@@ -21,7 +21,7 @@ export class CommentsForm {
     this.form = new FormGroup({
         "username": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
-        "rating": new FormControl("", [   Validators.min(1), Validators.max(5)])
+        "rating": new FormControl(null, [   Validators.min(1), Validators.max(5)])
     });
   }
 
