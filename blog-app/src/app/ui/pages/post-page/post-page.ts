@@ -29,7 +29,7 @@ import { WebSocketIoService } from '../../../services/websocket/websocket.io.ser
     // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
     { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl },
     // { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
-    WebSocketIoService
+    // WebSocketIoService
   ],
 })
 export class PostPage {
@@ -42,7 +42,7 @@ export class PostPage {
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: IPostInteractionsService,
     private route: ActivatedRoute,
     private comsStore: PostInteractionsStoreService,
-    private ws: WebSocketIoService 
+    // private ws: WebSocketIoService 
   ) {
 
     }
@@ -70,21 +70,21 @@ export class PostPage {
       }
     });
 
-    this.ws.subscribeToArticle(postId);
+    // this.ws.subscribeToArticle(postId);
 
     this.commentsSignal.set([]);
 
-    this.ws.getCommentCreated()
-      .pipe(
-        filter(data => data && data.articleId === postId),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(data => {
-        if (this.isLocalCreate) return;
-        if (!this.commentsSignal().some(c => c.id === data.id)) {
-          this.commentsSignal.update(comments => [...comments, data]);
-        }
-      });
+    // this.ws.getCommentCreated()
+    //   .pipe(
+    //     filter(data => data && data.articleId === postId),
+    //     takeUntilDestroyed(this.destroyRef)
+    //   )
+    //   .subscribe(data => {
+    //     if (this.isLocalCreate) return;
+    //     if (!this.commentsSignal().some(c => c.id === data.id)) {
+    //       this.commentsSignal.update(comments => [...comments, data]);
+    //     }
+    //   });
   }
 
 
