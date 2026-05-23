@@ -42,7 +42,7 @@ export class PostPage {
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: IPostInteractionsService,
     private route: ActivatedRoute,
     private comsStore: PostInteractionsStoreService,
-    // private ws: WebSocketIoService 
+    private ws: WebSocketIoService 
   ) {
 
     }
@@ -72,7 +72,7 @@ export class PostPage {
 
     // this.ws.subscribeToArticle(postId);
 
-    this.commentsSignal.set([]);
+    // this.commentsSignal.set([]);
 
     // this.ws.getCommentCreated()
     //   .pipe(
@@ -84,6 +84,31 @@ export class PostPage {
     //     if (!this.commentsSignal().some(c => c.id === data.id)) {
     //       this.commentsSignal.update(comments => [...comments, data]);
     //     }
+    //   });
+
+    // this.ws.getCommentRatingChanged()
+    //   .pipe(
+    //     filter(data => data?.articleId === this.articleId),
+    //     takeUntilDestroyed(this.destroyRef)
+    //   )
+    //   .subscribe(data => {
+    //     this.commentsSignal.update(comments =>
+    //       comments.map(c =>
+    //         c.id === data.commentId ? { ...c, rating: data.rating } : c
+    //       )
+    //     );
+    //   });
+
+    // this.ws.getArticleRatingChanged()
+    //   .pipe(
+    //     filter(data => data?.articleId === this.articleId),
+    //     takeUntilDestroyed(this.destroyRef)
+    //   )
+    //   .subscribe(data => {
+    //     this.article.update(article => {
+    //       if (!article) return article;
+    //       return { ...article, rating: data.rating };
+    //     });
     //   });
   }
 
@@ -151,4 +176,24 @@ export class PostPage {
       : '0⭐';
   }
 
+  onArticleRatingChange(delta: 1 | -1): void {
+    const method = delta === 1 
+      ? this.postInteractionsService.updateArticleRatingUp(this.articleId)
+      : this.postInteractionsService.updateArticleRatingDown(this.articleId);
+
+    method.subscribe({
+      next: (updated) => {
+        this.article.set(updated);
+      },
+      error: (err) => {
+        console.error('Ошибка изменения рейтинга статьи', err);
+      }
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    const postId = this.route.snapshot.paramMap.get('id') || '';
+    // this.ws.unsubscribeFromArticle(postId);
+  }
 }

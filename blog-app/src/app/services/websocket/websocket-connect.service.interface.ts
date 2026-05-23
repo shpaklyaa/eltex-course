@@ -13,9 +13,9 @@ export interface IWebsocketConnectService {
 
   getCommentCreated(): Observable<any>;
 
-//   getCommentRatingChanged(): Observable<any>;
+  getCommentRatingChanged(): Observable<any>;
 
-//   getArticleRatingChanged(): Observable<any>;
+  getArticleRatingChanged(): Observable<any>;
 
   disconnect(): void;
 }

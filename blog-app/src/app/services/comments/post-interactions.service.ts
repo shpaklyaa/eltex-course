@@ -2,8 +2,10 @@ import { Injectable, signal, computed, effect } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Observable, of, from } from 'rxjs';
 import { Coment } from '../../types/coment';
+import { Article } from '../../types/article';
 import { IPostInteractionsService } from './post-interactions.interface';
 import { PostInteractionsStoreService } from './post-interactions-store.service';
+import { error } from 'console';
 
 function getStoredComments(): Coment[] {
   const data = localStorage.getItem('comments');
@@ -74,5 +76,21 @@ export class PostInteractionsServiceImpl implements IPostInteractionsService {
     );
 
     return of(undefined);
+  }
+
+  updateCommentRatingUp(commentId: string): Observable<Coment> {
+     return of({ id: commentId, articleId: '', username: '', content: '', rating: 0 } as Coment);
+  }
+
+  updateCommentRatingDown(commentId: string): Observable<Coment> {
+     return of({ id: commentId, articleId: '', username: '', content: '', rating: 0 } as Coment);
+  }
+
+  updateArticleRatingUp(articleId: string): Observable<Article> {
+     return of({ id: articleId, title: '', content: ''} as Article);
+  }
+
+  updateArticleRatingDown(articleId: string): Observable<Article> {
+    return of({ id: articleId, title: '', content: ''} as Article);
   }
 }

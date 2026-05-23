@@ -5,11 +5,12 @@
         <img class="avatar" src="./assets/images/personlogo.svg" alt="Аватар">
         <div class="comment-info">
           <h3 class="comment-username">{{ comment.username }}</h3>
-            @if (comment.rating != null) {
-                {{ comment.rating }}⭐
-            } @else {
-                Без оценки
-            }
+          <div class="rating-inline">
+            <span>Рейтинг:</span>
+            <button (click)="onRatingChange(-1)" [disabled]="comment.rating === 0">-</button>
+            <span>{{ comment.rating ?? 0 }}</span>
+            <button (click)="onRatingChange(1)">+</button>
+        </div>
         </div>
       </div>
 
@@ -55,15 +56,13 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Оценка</mat-label>
-            <mat-select formControlName="rating">
-              <mat-option value="">Без оценки</mat-option>
-              @for (star of [1, 2, 3, 4, 5]; track star) {
-                <mat-option [value]="star">{{ star }} ⭐</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <div class="rating-inline">
+            <span>Рейтинг:</span>
+            <button (click)="onRatingChange(-1)" [disabled]="comment.rating === 0">-</button>
+            <span>{{ comment.rating ?? 0 }}</span>
+            <button (click)="onRatingChange(1)">+</button>
+          </div>
+
         </mat-card-content>
 
         <div class="comment-actions">
