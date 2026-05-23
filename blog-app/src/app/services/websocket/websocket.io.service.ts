@@ -12,8 +12,8 @@ export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
   private connectionStatus = signal<ConnectWsStatus>('disconnected');
 
   private readonly commentCreated$ = new BehaviorSubject<any>(null);
-//   private readonly commentRatingChanged$ = new BehaviorSubject<IncomingWebSocketMessage | null>(null);
-//   private readonly articleRatingChanged$ = new BehaviorSubject<IncomingWebSocketMessage | null>(null);
+  private readonly commentRatingChanged$ = new BehaviorSubject<any | null>(null);
+  private readonly articleRatingChanged$ = new BehaviorSubject<any | null>(null);
 
   constructor() {
     this.initSocket();
@@ -44,19 +44,20 @@ export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
 
   subscribeToArticle(articleId: string): void {
     if(!this.socket) return;
+
     this.socket?.emit('subscribe-article', articleId);
 
     this.socket.on(EwsEvents.COMMENT_CREATED, (message) => {
         this.commentCreated$.next(message.payload ?? message);
     });
 
-    // this.socket.on(EwsEvents.ARTICLE_RATING_CHANGED, (message) => {
-    //     this.commentCreated$.next(message.payload ?? message);
-    // });
+    this.socket.on(EwsEvents.ARTICLE_RATING_CHANGED, (message) => {
+        this.articleRatingChanged$.next(message.payload ?? message);
+    });
 
-    // this.socket.on(EwsEvents.COMMENT_RATING_CHANGED, (message) => {
-    //     this.commentCreated$.next(message.payload ?? message);
-    // });
+    this.socket.on(EwsEvents.COMMENT_RATING_CHANGED, (message) => {
+        this.commentRatingChanged$.next(message.payload ?? message);
+    });
   }
 
   unsubscribeFromArticle(articleId: string): void {
@@ -67,13 +68,13 @@ export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
     return this.commentCreated$.asObservable();
   }
 
-//   getCommentRatingChanged(): Observable<any> {
-//     return this.commentRatingChanged$.asObservable();
-//   }
+  getCommentRatingChanged(): Observable<any> {
+    return this.commentRatingChanged$.asObservable();
+  }
 
-//   getArticleRatingChanged(): Observable<any> {
-//     return this.articleRatingChanged$.asObservable();
-//   }
+  getArticleRatingChanged(): Observable<any> {
+    return this.articleRatingChanged$.asObservable();
+  }
 
   getConnectionStatus(): Signal<ConnectWsStatus> {
       return this.connectionStatus.asReadonly();

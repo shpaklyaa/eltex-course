@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, inject } from '@angular/core';
 import { Coment } from '../../../types/coment';
 import { MatCardModule } from '@angular/material/card';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { GqlService } from '../../../services/comments/graphql.service';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -12,6 +13,7 @@ import { MatIcon } from "@angular/material/icon";
   imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIcon],
   templateUrl: './comment.html',
   styleUrl: './comment.scss',
+  providers: [GqlService]
 })
 export class Comment {
   @Input() comment!: Coment;
@@ -20,6 +22,7 @@ export class Comment {
   @Output() save = new EventEmitter<Coment>();
   @Output() rate = new EventEmitter<{ commentId: string; value: number }>();
 
+  private gqlService = inject(GqlService);
   isEditing = false;
   form: FormGroup;
 
@@ -43,6 +46,26 @@ export class Comment {
   cancelEdit(): void {
     this.isEditing = false;
     this.form.reset();
+  }
+
+  onRatingChange(delta: -1 | 1): void {
+    const newRating = (this.comment.rating ?? 0) + delta;
+    if (newRating < 1 || newRating > 5) return;
+
+    this.comment.rating = newRating;
+
+    const method = delta === 1 
+      ? this.gqlService.updateCommentRatingUp(this.comment.id)
+      : this.gqlService.updateCommentRatingDown(this.comment.id);
+
+    method.subscribe({
+      next: (updated) => {
+        this.comment.rating = updated.rating;
+      },
+      error: () => {
+        this.comment.rating = this.comment.rating! - delta;
+      }
+    });
   }
 
   protected onSave(event: Event): void {
