@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RouterOutlet, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,6 +16,10 @@ import { PostInteractionsStoreService } from '../../../services/comments/post-in
 import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
 import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
+import { LoginModal } from '../../components/login-modal/login-modal';
+import { MatDialog } from '@angular/material/dialog'
+import { MatDialogRef } from '@angular/material/dialog'; 
+import { AuthService } from '../../../services/auth/auth-service';
 
 @Component({
   selector: 'app-blog',
@@ -24,7 +28,7 @@ import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-inter
     AdminPanel,
     CommonModule,
     FormModal,
-    StatsModal
+    StatsModal,
   ],
   providers: [
     { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
@@ -43,7 +47,9 @@ export class Blog implements OnInit {
     private store: ArticlesStoreService,
     private comsStore: PostInteractionsStoreService,
     private destroyRef: DestroyRef,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -180,4 +186,23 @@ export class Blog implements OnInit {
       };
     });
   });
+
+  protected openAuthModal(): void {
+    const modal = this.dialog.open<LoginModal>(LoginModal);
+    modal.afterClosed().subscribe((data) => {
+      if (!data) return;
+
+      if ('email' in data) {
+        this.authService.register(data).subscribe({
+          next: () => console.log('Регистрация успешна', data),
+          error: err => console.error('Ошибка регистрации:', err)
+        });
+      } else {
+        this.authService.login(data).subscribe({
+          next: () => console.log('Вход выполнен', data),
+          error: err => console.error('Ошибка входа:', err)
+        });
+      }
+    });
+  }
 }

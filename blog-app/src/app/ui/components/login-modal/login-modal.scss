@@ -1,0 +1,36 @@
+@import '../../../../variables.scss';
+
+.form {
+    margin: auto;
+    margin: 30px 20px 0px 20px;
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-reg {
+    margin: auto;
+    margin: 30px 20px 0px 20px;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.register{
+    text-align: center;
+}
+
+.out-btn {
+    margin-bottom: 20px;
+    margin: 2px 20px 30px 20px;
+}
+

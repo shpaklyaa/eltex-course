@@ -27,9 +27,9 @@ import { WebSocketIoService } from '../../../services/websocket/websocket.io.ser
   styleUrl: './post-page.scss',
   providers: [
     // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl },
-    // { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
-    // WebSocketIoService
+    // { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl },
+    { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
+    WebSocketIoService
   ],
 })
 export class PostPage {
@@ -70,46 +70,46 @@ export class PostPage {
       }
     });
 
-    // this.ws.subscribeToArticle(postId);
+    this.ws.subscribeToArticle(postId);
 
-    // this.commentsSignal.set([]);
+    this.commentsSignal.set([]);
 
-    // this.ws.getCommentCreated()
-    //   .pipe(
-    //     filter(data => data && data.articleId === postId),
-    //     takeUntilDestroyed(this.destroyRef)
-    //   )
-    //   .subscribe(data => {
-    //     if (this.isLocalCreate) return;
-    //     if (!this.commentsSignal().some(c => c.id === data.id)) {
-    //       this.commentsSignal.update(comments => [...comments, data]);
-    //     }
-    //   });
+    this.ws.getCommentCreated()
+      .pipe(
+        filter(data => data && data.articleId === postId),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(data => {
+        if (this.isLocalCreate) return;
+        if (!this.commentsSignal().some(c => c.id === data.id)) {
+          this.commentsSignal.update(comments => [...comments, data]);
+        }
+      });
 
-    // this.ws.getCommentRatingChanged()
-    //   .pipe(
-    //     filter(data => data?.articleId === this.articleId),
-    //     takeUntilDestroyed(this.destroyRef)
-    //   )
-    //   .subscribe(data => {
-    //     this.commentsSignal.update(comments =>
-    //       comments.map(c =>
-    //         c.id === data.commentId ? { ...c, rating: data.rating } : c
-    //       )
-    //     );
-    //   });
+    this.ws.getCommentRatingChanged()
+      .pipe(
+        filter(data => data?.articleId === this.articleId),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(data => {
+        this.commentsSignal.update(comments =>
+          comments.map(c =>
+            c.id === data.commentId ? { ...c, rating: data.rating } : c
+          )
+        );
+      });
 
-    // this.ws.getArticleRatingChanged()
-    //   .pipe(
-    //     filter(data => data?.articleId === this.articleId),
-    //     takeUntilDestroyed(this.destroyRef)
-    //   )
-    //   .subscribe(data => {
-    //     this.article.update(article => {
-    //       if (!article) return article;
-    //       return { ...article, rating: data.rating };
-    //     });
-    //   });
+    this.ws.getArticleRatingChanged()
+      .pipe(
+        filter(data => data?.articleId === this.articleId),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(data => {
+        this.article.update(article => {
+          if (!article) return article;
+          return { ...article, rating: data.rating };
+        });
+      });
   }
 
 
@@ -194,6 +194,6 @@ export class PostPage {
 
   ngOnDestroy(): void {
     const postId = this.route.snapshot.paramMap.get('id') || '';
-    // this.ws.unsubscribeFromArticle(postId);
+    this.ws.unsubscribeFromArticle(postId);
   }
 }

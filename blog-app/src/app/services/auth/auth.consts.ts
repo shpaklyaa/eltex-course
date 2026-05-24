@@ -1,0 +1,1 @@
+export const ACCES_TOKEN_LS_KEY = 'access'

@@ -12,6 +12,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client';
+import { AuthService } from './services/auth/auth-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,6 @@ export const appConfig: ApplicationConfig = {
       provide: ARTICLES_SERVICE, 
       useClass: environment.useLcService ? ArticlesServiceImpl : HttpArticleServiceImpl
     },
-
+    AuthService
   ]
 };

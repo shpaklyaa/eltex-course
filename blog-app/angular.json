@@ -34,7 +34,7 @@
               "src/variables.scss"
             ],
             "styles": ["src/styles.scss"],
-            "baseHref": "/eltex-course/"
+            "baseHref": "/"
           },
           "configurations": {
             "production": {
