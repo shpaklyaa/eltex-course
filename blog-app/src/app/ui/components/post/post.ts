@@ -1,10 +1,11 @@
 import { Component, Input, Output, HostBinding, EventEmitter, computed } from '@angular/core';
 import { Article } from '../../../types/article';
 import { Blog } from '../../pages/blog/blog';
+import { HasRoleDirective } from '../../../directives/has-role.directive';
 
 @Component({
   selector: 'app-post',
-  imports: [],
+  imports: [HasRoleDirective],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })

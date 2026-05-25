@@ -20,7 +20,8 @@ export class LoginModal {
     login: new FormControl(null, [Validators.required]),
     username: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required]),
-    email: new FormControl('example@mail.ru', [Validators.email])
+    email: new FormControl('example@mail.ru', [Validators.email]),
+    isAdmin: new FormControl(null),
   });
 
   protected onClose(): void {
@@ -30,13 +31,13 @@ export class LoginModal {
   protected onLogin(): void {
     const { login, password } = this.form.value;
     if (login && password) {
-      this.dialogRef.close({ login, password });
+      this.dialogRef.close({ login, password });  
     }
   }
   protected onRegister(): void {
-    const { username, email, password } = this.form.value;
-    if (username && email && password) {
-      this.dialogRef.close({ username, email, password });
+    const { username, email, password, isAdmin } = this.form.value;
+    if (username && email && password && isAdmin) {
+      this.dialogRef.close({ username, email, password, isAdmin });
     }
   }
 }

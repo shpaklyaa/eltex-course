@@ -1,9 +1,7 @@
-<app-admin-panel
+<app-admin-panel *appHasRole="'admin'"
 (openModal)="openModalForm()"
 (openStats)="openModalStats()"
 ></app-admin-panel>
-
-<button (click)="openAuthModal()"></button>
 
 <section class="blogs">
     <div class="blogs-title-grid">

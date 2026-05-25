@@ -20,6 +20,7 @@ import { LoginModal } from '../../components/login-modal/login-modal';
 import { MatDialog } from '@angular/material/dialog'
 import { MatDialogRef } from '@angular/material/dialog'; 
 import { AuthService } from '../../../services/auth/auth-service';
+import { HasRoleDirective } from '../../../directives/has-role.directive';
 
 @Component({
   selector: 'app-blog',
@@ -29,6 +30,7 @@ import { AuthService } from '../../../services/auth/auth-service';
     CommonModule,
     FormModal,
     StatsModal,
+    HasRoleDirective
   ],
   providers: [
     { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
@@ -48,8 +50,6 @@ export class Blog implements OnInit {
     private comsStore: PostInteractionsStoreService,
     private destroyRef: DestroyRef,
     private router: Router,
-    private authService: AuthService,
-    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -186,23 +186,4 @@ export class Blog implements OnInit {
       };
     });
   });
-
-  protected openAuthModal(): void {
-    const modal = this.dialog.open<LoginModal>(LoginModal);
-    modal.afterClosed().subscribe((data) => {
-      if (!data) return;
-
-      if ('email' in data) {
-        this.authService.register(data).subscribe({
-          next: () => console.log('Регистрация успешна', data),
-          error: err => console.error('Ошибка регистрации:', err)
-        });
-      } else {
-        this.authService.login(data).subscribe({
-          next: () => console.log('Вход выполнен', data),
-          error: err => console.error('Ошибка входа:', err)
-        });
-      }
-    });
-  }
 }

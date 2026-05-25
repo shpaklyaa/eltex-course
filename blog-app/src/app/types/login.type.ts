@@ -7,6 +7,7 @@ export interface IRegisterData {
   username: string;
   email: string;
   password: string;
+  isAdmin: boolean;
 }
 
 export interface IUser {

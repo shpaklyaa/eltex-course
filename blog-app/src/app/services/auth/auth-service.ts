@@ -3,11 +3,16 @@ import { inject, Injectable, signal } from "@angular/core";
 import { IAuthPayload, ILoginData, IUser, IRegisterData } from "../../types/login.type";
 import { Observable, tap } from "rxjs";
 import { ACCES_TOKEN_LS_KEY } from "./auth.consts";
+import { IAuthService } from "./auth.service.interface";
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
     private readonly httpClient = inject(HttpClient);
-    private readonly currentUser = signal<IUser | null>(null);
+    public readonly currentUser = signal<IUser | null>(null);
+
+    constructor() {
+        this.restoreSession();
+    }
 
     public login(data: ILoginData): Observable<unknown> {
         return this.httpClient.post<IAuthPayload>('api/auth/login', data)
@@ -33,7 +38,19 @@ export class AuthService {
         localStorage.removeItem(ACCES_TOKEN_LS_KEY);
     }
 
-    public getCurrentUser(): IUser | null {
-        return this.currentUser();
+    public restoreSession(): void {
+        const token = localStorage.getItem(ACCES_TOKEN_LS_KEY);
+        if (!token) return;
+
+        this.httpClient.get<IUser>('/api/auth/me').subscribe({
+        next: (payload) => {
+            this.currentUser.set(payload);
+            console.log('Сессия восстановлена через /auth/me', payload);
+        },
+        error: (err) => {
+            console.warn('Токен недействителен или истёк — очищаем сессию', err);
+            this.logout();
+        }
+        });
     }
 }

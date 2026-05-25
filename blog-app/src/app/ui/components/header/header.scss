@@ -36,3 +36,65 @@ a:hover {
     color: rgb(18, 129, 14);
     font-weight: bold;
 }
+
+.account {
+    position: absolute;
+    top: 0px;
+    left: 5px;
+    border-radius: 40%;
+    background-color: $hover-color;
+    transition:  0.5s ease;
+    z-index: 999;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1); 
+}
+
+.account:hover {
+    background-color: #fff;
+    border-color: $hover-color;
+}
+
+.acc-info {
+    position: absolute;
+    top: 35px;
+    left: 25px;
+    height: 55px;
+    width: 190px;
+    transform: translate(-150px, -50%); 
+    background-color: #ffffff;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 1s ease;
+    gap: 30px;
+    opacity: 0;
+    border-radius: 0 25% 25% 0;
+}
+
+.account:hover + .acc-info, .acc-info:hover {
+    transform: translate(15px, -50%);
+    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.15);
+    opacity: 1; 
+}
+
+.username {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+}
+
+.role {
+    position: absolute;
+    top: 5px;
+    left: 25px;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 0px;
+    left: 140px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.logout-btn:hover {
+    background-color: #f3f3f3;
+    transition: transform 0.5s ease
+}

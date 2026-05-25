@@ -1,14 +1,11 @@
-<div class="comment-form-box">
+<div class="comment-form-box" *appIsLoggedIn>
   <form [formGroup]="form" class="comments-form" (ngSubmit)="onSave()">
     <h3 class="title">Напишите свой отзыв об этой статье</h3>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Как вас зовут?</mat-label>
-      <input matInput formControlName="username" placeholder="Введите ваше имя" required />
-      @if (form.controls['username'].invalid && form.controls['username'].touched) {
-        <mat-error>Имя должно быть от 2 до 10 символов</mat-error>
-      }
-    </mat-form-field>
+    <div class="user-box">
+      <img class="avatar" src="./assets/images/personlogo.svg" alt="Аватар">
+      <h3 class="comment-username">{{ authService.currentUser()?.username }}</h3>
+    </div>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Комментарий</mat-label>

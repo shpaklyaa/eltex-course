@@ -10,10 +10,10 @@
             <time class="article-date">14 oct, 2026</time>
         </div>
     </article>
-    <button class="edit-btn" (click)="onEdit()">
+    <button class="edit-btn" (click)="onEdit()" *appHasRole="'admin'">
             <img src="./assets/images/pencil2.svg" width="20px" height="20px">
         </button>
-        <button class="delete-btn" (click)="onDelete()">
+        <button class="delete-btn" (click)="onDelete()" *appHasRole="'admin'">
             <img src="./assets/images/cross.svg" width="25px" height="25px">
     </button>
 </div>    

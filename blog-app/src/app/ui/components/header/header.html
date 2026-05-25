@@ -7,4 +7,16 @@
                 <a (click)="scrollTo('footer')">Contacts</a>
             </nav>
         </div>
+        <div class="acc-box">
+            <button (click)="openAuthModal()" class="account">
+                <img src="./assets/images/personlogo.svg" alt="Аватар">
+            </button>
+            <div class="acc-info" *appIsLoggedIn>
+                <span class="role">{{authService.currentUser()?.role}}</span>
+                <span class="username">{{authService.currentUser()?.username}}</span>
+                <button class="logout-btn" (click)="logout()">
+                    <mat-icon fontIcon="exit_to_app"></mat-icon>
+                </button>
+            </div>
+        </div>
 </header>
