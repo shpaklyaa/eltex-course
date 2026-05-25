@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, inject, Inject } from '@angular/core';
 import { Coment } from '../../../types/coment';
 import { MatCardModule } from '@angular/material/card';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -7,10 +7,13 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatIcon } from "@angular/material/icon";
+import { HasRoleDirective } from '../../../directives/has-role.directive';
+import { AuthService } from '../../../services/auth/auth-service';
+import { AUTH_SERVICE } from '../../../services/auth/auth-service.token';
 
 @Component({
   selector: 'app-comment',
-  imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIcon],
+  imports: [MatCardModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIcon, HasRoleDirective],
   templateUrl: './comment.html',
   styleUrl: './comment.scss',
   providers: [GqlService]
@@ -26,7 +29,7 @@ export class Comment {
   isEditing = false;
   form: FormGroup;
 
-  constructor(){
+  constructor(@Inject(AUTH_SERVICE) protected authService: AuthService){
     this.form = new FormGroup({
         "username": new FormControl("", [ Validators.required,  Validators.minLength(2), Validators.maxLength(10)]),
         "content": new FormControl("", [ Validators.required,  Validators.minLength(5), Validators.maxLength(200)]),
@@ -37,7 +40,6 @@ export class Comment {
   startEdit(): void {
     this.isEditing = true;
     this.form.reset({
-      username: this.comment.username,
       content: this.comment.content,
       rating: this.comment.rating ?? null
     })

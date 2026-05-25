@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, signal, computed, DestroyRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RouterOutlet, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,6 +16,11 @@ import { PostInteractionsStoreService } from '../../../services/comments/post-in
 import { PostInteractionsServiceImpl } from '../../../services/comments/post-interactions.service';
 import { IPostInteractionsService } from '../../../services/comments/post-interactions.interface';
 import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-interactions.token';
+import { LoginModal } from '../../components/login-modal/login-modal';
+import { MatDialog } from '@angular/material/dialog'
+import { MatDialogRef } from '@angular/material/dialog'; 
+import { AuthService } from '../../../services/auth/auth-service';
+import { HasRoleDirective } from '../../../directives/has-role.directive';
 
 @Component({
   selector: 'app-blog',
@@ -24,7 +29,8 @@ import { POST_INTERACTIONS_SERVICE } from '../../../services/comments/post-inter
     AdminPanel,
     CommonModule,
     FormModal,
-    StatsModal
+    StatsModal,
+    HasRoleDirective
   ],
   providers: [
     { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
@@ -43,7 +49,7 @@ export class Blog implements OnInit {
     private store: ArticlesStoreService,
     private comsStore: PostInteractionsStoreService,
     private destroyRef: DestroyRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {

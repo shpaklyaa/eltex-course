@@ -1,0 +1,55 @@
+@if(!isRegister()) {
+    <form [formGroup]="form" class="form" (submit)="onLogin()">
+        <h3 class="title">Вход в учетную запись</h3>
+
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Как вас зовут?</mat-label>
+        <input matInput formControlName="login" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Комментарий</mat-label>
+        <input matInput formControlName="password" type="password" required />
+        </mat-form-field>
+
+        <button class="btn" (submit)="onLogin()">
+        Войти
+        </button>
+    </form>
+        <p class="register">Нет учетной записи?<p></p>
+        <button class="out-btn" (click)="isRegister.set(true)">
+            Создать
+        </button>
+        <button class="out-btn" mat-button (click)="onClose()">Отмена</button>
+} @else {
+    <form [formGroup]="form" class="form-reg" (submit)="onRegister()">
+        <h3 class="title">Регистрация</h3>
+
+        <mat-form-field>
+        <input matInput placeholder="Логин" formControlName="username" required />
+        </mat-form-field>
+
+        <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email"/>
+        </mat-form-field>
+
+        <mat-form-field>
+        <input matInput type="password" placeholder="Пароль" formControlName="password" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Оценка</mat-label>
+            <mat-select formControlName="isAdmin">
+                <mat-option value="">Без оценки</mat-option>
+                @for (i of ["true", "false"]; track i) {
+                <mat-option [value]="i">{{ i }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div class="buttons">
+        <button mat-raised-button color="primary" type="submit" (submit)="onRegister()">Зарегистрироваться</button>
+        <button mat-button (click)="isRegister.set(false)">Отмена</button>
+        </div>
+    </form>
+}

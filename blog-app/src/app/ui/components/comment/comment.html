@@ -7,9 +7,9 @@
           <h3 class="comment-username">{{ comment.username }}</h3>
           <div class="rating-inline">
             <span>Рейтинг:</span>
-            <button (click)="onRatingChange(-1)" [disabled]="comment.rating === 0">-</button>
+            <button (click)="onRatingChange(-1)" [disabled]="comment.rating === 0" *appHasRole="'admin'">-</button>
             <span>{{ comment.rating ?? 0 }}</span>
-            <button (click)="onRatingChange(1)">+</button>
+            <button (click)="onRatingChange(1)" *appHasRole="'admin'">+</button>
         </div>
         </div>
       </div>
@@ -19,10 +19,10 @@
       </mat-card-content>
 
       <div class="comment-actions">
-        <button class="edit-btn" (click)="startEdit()">
+        <button class="edit-btn" (click)="startEdit()" *appHasRole="'admin'">
           <mat-icon svgIcon="edit" width="20" height="20" alt="Редактировать"></mat-icon>
         </button>
-        <button class="delete-btn" (click)="onDelete()">
+        <button class="delete-btn" (click)="onDelete()" *appHasRole="'admin'">
           <mat-icon svgIcon="cross" width="25" height="25" alt="Удалить"></mat-icon>
         </button>
       </div>

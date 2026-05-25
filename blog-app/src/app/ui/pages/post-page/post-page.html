@@ -7,9 +7,9 @@
         <p class="article-content">{{article()?.content}}</p>
         <div class="article-meta">
         <span>Рейтинг:</span>
-            <button (click)="onArticleRatingChange(-1)" [disabled]="article()?.rating === 0">-</button>
+            <button (click)="onArticleRatingChange(-1)" [disabled]="article()?.rating === 0" *appHasRole="'admin'">-</button>
             <span>{{ article()?.rating ?? 0 }}</span>
-            <button (click)="onArticleRatingChange(1)">+</button>
+            <button (click)="onArticleRatingChange(1)" *appHasRole="'admin'">+</button>
         </div>
         <time class="article-date">14 oct, 2026</time> 
     </div>
