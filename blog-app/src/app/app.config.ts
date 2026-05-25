@@ -24,13 +24,13 @@ export const appConfig: ApplicationConfig = {
 
     { 
       provide: ARTICLES_SERVICE, 
-      useClass: ArticlesServiceImpl
-      // useClass: environment.useLcService ? ArticlesServiceImpl : HttpArticleServiceImpl
+      // useClass: ArticlesServiceImpl
+      useClass: environment.useLcService ? ArticlesServiceImpl : HttpArticleServiceImpl
     },
     { 
       provide: AUTH_SERVICE, 
-      useClass: LocalStorageAuthService
-      // useClass: environment.useLcService ? LocalStorageAuthService : AuthService
+      // useClass: LocalStorageAuthService
+      useClass: environment.useLcService ? LocalStorageAuthService : AuthService
     }
   ]
 };
