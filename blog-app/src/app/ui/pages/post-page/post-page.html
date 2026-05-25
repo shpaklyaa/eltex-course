@@ -6,17 +6,22 @@
         <h3 class="article-title">{{article()?.title}}</h3>
         <p class="article-content">{{article()?.content}}</p>
         <div class="article-meta">
-        <span>Рейтинг:</span>
+        <span>Рейтинг: </span>
             <button (click)="onArticleRatingChange(-1)" [disabled]="article()?.rating === 0" *appHasRole="'admin'">-</button>
-            <span>{{ article()?.rating ?? 0 }}</span>
+            <span>{{ article()?.rating ?? 0 }}⭐</span>
             <button (click)="onArticleRatingChange(1)" *appHasRole="'admin'">+</button>
         </div>
         <time class="article-date">14 oct, 2026</time> 
     </div>
 </article>
-<app-comments-form
-(save)="saveComment($event)">
-</app-comments-form>
+
+@if (isLoggedIn()) {
+    <app-comments-form
+    (save)="saveComment($event)">
+    </app-comments-form>
+} @else {
+    <div class="auth-to-comment-box"><h3 class="auth-to-comment">Нужно авторизоваться, чтобы оставлять комментарии</h3></div>
+}
 
 <div class="blogs-grid">
     @for (comment of comments(); track comment?.id) {

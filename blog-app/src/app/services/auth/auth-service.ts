@@ -53,4 +53,8 @@ export class AuthService implements IAuthService {
         }
         });
     }
+
+    isLoggedIn(): boolean {
+        return !!this.currentUser();
+    }
 }

@@ -21,6 +21,8 @@ import { MatDialog } from '@angular/material/dialog'
 import { MatDialogRef } from '@angular/material/dialog'; 
 import { AuthService } from '../../../services/auth/auth-service';
 import { HasRoleDirective } from '../../../directives/has-role.directive';
+import { environment } from '../../../../environments/environment';
+import { GqlService } from '../../../services/comments/graphql.service';
 
 @Component({
   selector: 'app-blog',
@@ -33,7 +35,7 @@ import { HasRoleDirective } from '../../../directives/has-role.directive';
     HasRoleDirective
   ],
   providers: [
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl }
+    { provide: POST_INTERACTIONS_SERVICE, useClass: environment.useLcService ? PostInteractionsServiceImpl : GqlService }
   ],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',

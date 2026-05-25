@@ -88,6 +88,9 @@ export class LocalStorageAuthService implements IAuthService {
         }
     }
 
+    public isLoggedIn(): boolean {
+        return !!this.currentUser()
+    }
 
     private getUsers(): (IUser & { password: string })[] {
         const json = localStorage.getItem(USERS_KEY);
