@@ -22,6 +22,7 @@ import { HasRoleDirective } from '../../../directives/has-role.directive';
 import { WEB_SOCKET_SERVICE } from '../../../services/websocket/websocket.token';
 import { MockWsService} from '../../../services/websocket/websocket.Lc.service';
 import { IWebsocketConnectService } from '../../../services/websocket/websocket-connect.service.interface';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-post-page',
@@ -31,11 +32,11 @@ import { IWebsocketConnectService } from '../../../services/websocket/websocket-
   styleUrl: './post-page.scss',
   providers: [
     // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    { provide: POST_INTERACTIONS_SERVICE, useClass: PostInteractionsServiceImpl },
+    { provide: POST_INTERACTIONS_SERVICE, useClass: environment.useLcService ? PostInteractionsServiceImpl : HttpPostInteractionsServiceImpl },
     // { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
 
     // { provide: WEB_SOCKET_SERVICE, useClass: WebSocketIoService },
-    { provide: WEB_SOCKET_SERVICE, useClass: MockWsService },
+    { provide: WEB_SOCKET_SERVICE, useClass: environment.useLcService ? MockWsService : WebSocketIoService },
   ],
 })
 export class PostPage {
