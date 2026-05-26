@@ -15,16 +15,6 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Оценка</mat-label>
-      <mat-select formControlName="rating">
-        <mat-option value="">Без оценки</mat-option>
-        @for (star of [1, 2, 3, 4, 5]; track star) {
-          <mat-option [value]="star">{{ star }} ⭐</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
     <button type="submit" class="comment-form-btn" [disabled]="form.invalid">
       Отправить
     </button>
