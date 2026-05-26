@@ -1,10 +1,13 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect, Inject } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormControl, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { IsLoggedInDirective } from '../../../directives/is-logged-in.directive';
+import { AUTH_SERVICE } from '../../../services/auth/auth-service.token';
+import { IAuthService } from '../../../services/auth/auth.service.interface';
 
 @Component({
   selector: 'app-login-modal',
@@ -15,6 +18,14 @@ import { MatDialog } from '@angular/material/dialog';
 export class LoginModal {
   private readonly dialogRef = inject(MatDialogRef<LoginModal>);
   protected isRegister = signal(false);
+
+  isLoggedIn = signal(false);
+
+  constructor(@Inject(AUTH_SERVICE) private authService: IAuthService) {
+    effect(() => {
+      this.isLoggedIn.set(this.authService.isLoggedIn());
+    });
+  }
 
   protected form = new FormGroup({
     login: new FormControl(null, [Validators.required]),

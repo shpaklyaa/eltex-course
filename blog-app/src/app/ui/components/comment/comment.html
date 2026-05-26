@@ -6,9 +6,9 @@
         <div class="comment-info">
           <h3 class="comment-username">{{ comment.username }}</h3>
           <div class="rating-inline">
-            <span>Рейтинг:</span>
+            <span>Рейтинг: </span>
             <button (click)="onRatingChange(-1)" [disabled]="comment.rating === 0" *appHasRole="'admin'">-</button>
-            <span>{{ comment.rating ?? 0 }}</span>
+            <span>{{ comment.rating ?? 0 }}⭐</span>
             <button (click)="onRatingChange(1)" *appHasRole="'admin'">+</button>
         </div>
         </div>

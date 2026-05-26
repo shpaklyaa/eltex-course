@@ -1,17 +1,18 @@
 import { Injectable, OnDestroy, Signal, signal } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { EwsEvents } from './ws-event.enum';
 import { ConnectWsStatus } from './ws.types';
 import { IWebsocketConnectService } from './websocket-connect.service.interface';
+import { Coment } from '../../types/coment';
 
 @Injectable()
 export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
   private socket?: Socket;
   private connectionStatus = signal<ConnectWsStatus>('disconnected');
 
-  private readonly commentCreated$ = new BehaviorSubject<any>(null);
+  private readonly commentCreated$ = new BehaviorSubject<Coment | null>(null);
   private readonly commentRatingChanged$ = new BehaviorSubject<any | null>(null);
   private readonly articleRatingChanged$ = new BehaviorSubject<any | null>(null);
 
@@ -45,6 +46,10 @@ export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
   subscribeToArticle(articleId: string): void {
     if(!this.socket) return;
 
+    this.socket.off(EwsEvents.COMMENT_CREATED);
+    this.socket.off(EwsEvents.ARTICLE_RATING_CHANGED);
+    this.socket.off(EwsEvents.COMMENT_RATING_CHANGED);
+
     this.socket?.emit('subscribe-article', articleId);
 
     this.socket.on(EwsEvents.COMMENT_CREATED, (message) => {
@@ -62,12 +67,15 @@ export class WebSocketIoService implements IWebsocketConnectService, OnDestroy {
 
   unsubscribeFromArticle(articleId: string): void {
     this.socket?.emit('unsubscribe-article', articleId);
+
+    this.socket?.off(EwsEvents.COMMENT_CREATED);
+    this.socket?.off(EwsEvents.ARTICLE_RATING_CHANGED);
+    this.socket?.off(EwsEvents.COMMENT_RATING_CHANGED);
   }
 
-  getCommentCreated() {
-    return this.commentCreated$.asObservable();
+  getCommentCreated(): Observable<Coment | null> {
+    return this.commentCreated$.asObservable()
   }
-
   getCommentRatingChanged(): Observable<any> {
     return this.commentRatingChanged$.asObservable();
   }

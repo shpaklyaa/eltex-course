@@ -23,6 +23,8 @@ import { WEB_SOCKET_SERVICE } from '../../../services/websocket/websocket.token'
 import { MockWsService} from '../../../services/websocket/websocket.Lc.service';
 import { IWebsocketConnectService } from '../../../services/websocket/websocket-connect.service.interface';
 import { environment } from '../../../../environments/environment.development';
+import { AUTH_SERVICE } from '../../../services/auth/auth-service.token';
+import { IAuthService } from '../../../services/auth/auth.service.interface';
 
 @Component({
   selector: 'app-post-page',
@@ -31,11 +33,7 @@ import { environment } from '../../../../environments/environment.development';
   templateUrl: './post-page.html',
   styleUrl: './post-page.scss',
   providers: [
-    // { provide: POST_INTERACTIONS_SERVICE, useClass: HttpPostInteractionsServiceImpl }
-    { provide: POST_INTERACTIONS_SERVICE, useClass: environment.useLcService ? PostInteractionsServiceImpl : HttpPostInteractionsServiceImpl },
-    // { provide: POST_INTERACTIONS_SERVICE, useClass: GqlService },
-
-    // { provide: WEB_SOCKET_SERVICE, useClass: WebSocketIoService },
+    { provide: POST_INTERACTIONS_SERVICE, useClass: environment.useLcService ? PostInteractionsServiceImpl : GqlService },
     { provide: WEB_SOCKET_SERVICE, useClass: environment.useLcService ? MockWsService : WebSocketIoService },
   ],
 })
@@ -43,15 +41,19 @@ export class PostPage {
   private destroyRef = inject(DestroyRef);
   private commentsSignal = signal<Coment[]>([]);
   private isLocalCreate = false;
-
+  isLoggedIn = signal(false);
+  
   constructor(
     @Inject(ARTICLES_SERVICE) private articlesService: IArticlesService,
     @Inject(POST_INTERACTIONS_SERVICE) private postInteractionsService: IPostInteractionsService,
     @Inject(WEB_SOCKET_SERVICE) private ws: IWebsocketConnectService,
+    @Inject(AUTH_SERVICE) private authService: IAuthService,
     private route: ActivatedRoute,
     private comsStore: PostInteractionsStoreService,
   ) {
-
+      effect(() => {
+        this.isLoggedIn.set(this.authService.isLoggedIn());
+      });
     }
 
   article = signal<Article | undefined>(undefined);
@@ -60,7 +62,7 @@ export class PostPage {
   
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('id') || '';
-
+    console.log('[PostPage] INIT', this.articleId, 'instance:', this);
     this.articlesService.getById(postId).subscribe({
       next: (data) => {
         this.article.set(data);
@@ -79,19 +81,35 @@ export class PostPage {
 
     this.ws.subscribeToArticle(postId);
 
-    // this.commentsSignal.set([]);
-
     this.ws.getCommentCreated()
-      .pipe(
-        filter(data => data && data.articleId === postId),
-        takeUntilDestroyed(this.destroyRef)
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => {
-        if (this.isLocalCreate) return;
-        if (!this.commentsSignal().some(c => c.id === data.id)) {
-          this.commentsSignal.update(comments => [...comments, data]);
+        if (!data || typeof data !== 'object') {
+          console.warn('[PostPage] Пропущен некорректный комментарий:', data);
+          return;
         }
-      });
+
+        const raw = data as any;
+        const id = raw.id || raw.commentId || raw._id;
+
+        if (!id) {
+          console.warn('[PostPage] Комментарий без идентификатора — пропущен:', data);
+          return;
+        }
+
+        const normalized: Coment = {
+          id: String(id),
+          username: raw.username ?? 'Аноним',
+          content: raw.content ?? '',
+          articleId: raw.articleId ?? '',
+          rating: raw.rating ?? undefined,
+        };
+
+        if (!this.commentsSignal().some(c => c.id === normalized.id)) {
+          this.commentsSignal.update(comments => [...comments, normalized]);
+          console.log('[PostPage] Добавлен комментарий:', normalized);
+        }
+    });
 
     this.ws.getCommentRatingChanged()
       .pipe(
@@ -202,5 +220,6 @@ export class PostPage {
   ngOnDestroy(): void {
     const postId = this.route.snapshot.paramMap.get('id') || '';
     this.ws.unsubscribeFromArticle(postId);
+    console.log('[PostPage] DESTROY', this.articleId);
   }
 }

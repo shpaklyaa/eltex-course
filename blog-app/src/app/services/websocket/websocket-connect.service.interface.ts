@@ -1,6 +1,7 @@
 import { Signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectWsStatus } from './ws.types';
+import { Coment } from '../../types/coment';
 
 export interface IWebsocketConnectService {
   getConnectionStatus(): Signal<ConnectWsStatus>;
@@ -11,7 +12,7 @@ export interface IWebsocketConnectService {
 
   unsubscribeFromArticle(articleId: string): void;
 
-  getCommentCreated(): Observable<any>;
+  getCommentCreated(): Observable<Coment | null>;
 
   getCommentRatingChanged(): Observable<any>;
 

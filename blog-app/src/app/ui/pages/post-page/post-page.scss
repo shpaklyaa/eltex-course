@@ -103,3 +103,18 @@
 .edit-btn:hover {
     transform: scale(1.1);
 }
+
+.auth-to-comment-box {
+  max-width: 1200px;
+  height: 200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #f4fbf4;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.auth-to-comment{
+    margin-top: 65px;
+}

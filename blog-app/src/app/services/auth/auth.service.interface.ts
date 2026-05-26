@@ -6,4 +6,5 @@ export interface IAuthService {
   register(data: IRegisterData): Observable<unknown>;
   logout(): void;
   restoreSession(): void;
+  isLoggedIn(): boolean;
 }
